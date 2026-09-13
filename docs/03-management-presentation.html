@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="fa-IR" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اکوسیستم شبکه تخفیف و باشگاه پذیرندگان</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--navy:#1a2744;--navy-light:#243352;--navy-dark:#111b30;
+--blue:#2563eb;--sky:#0ea5e9;--cyan:#06b6d4;
+--white:#ffffff;--gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-300:#cbd5e1;--gray-400:#94a3b8;--gray-500:#64748b;--gray-600:#475569;--gray-700:#334155;--gray-800:#1e293b;
+--green:#10b981;--amber:#f59e0b;--red:#ef4444;--emerald:#059669;
+--shadow:0 4px 24px rgba(0,0,0,.08);--shadow-lg:0 8px 40px rgba(0,0,0,.12);
+--radius:16px;--radius-sm:10px;
+}
+html,body{font-family:'Vazirmatn',system-ui,sans-serif;overflow:hidden;height:100%;width:100%;background:#000}
+.presentation{position:relative;width:100vw;height:100vh}
+.slide{position:absolute;top:0;right:0;width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 80px;opacity:0;visibility:hidden;transition:opacity .5s ease,transform .5s ease;transform:scale(.97);overflow:hidden}
+.slide.active{opacity:1;visibility:visible;transform:scale(1);z-index:2}
+.slide.prev{transform:scale(1.03)}
+
+/* Backgrounds */
+.bg-navy{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);color:var(--white)}
+.bg-white{background:var(--white);color:var(--navy)}
+.bg-light{background:linear-gradient(135deg,var(--gray-50) 0%,#e0f2fe 100%);color:var(--navy)}
+
+/* Typography */
+.slide-title{font-size:2.6rem;font-weight:800;margin-bottom:40px;line-height:1.4;text-align:center}
+.slide-subtitle{font-size:1.4rem;font-weight:400;opacity:.85;margin-bottom:30px;text-align:center;line-height:1.7}
+.slide-content{width:100%;max-width:1200px;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center}
+
+/* Cards */
+.card-grid{display:grid;gap:24px;width:100%;max-width:1100px}
+.card-grid.cols-2{grid-template-columns:1fr 1fr}
+.card-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+.card-grid.cols-4{grid-template-columns:1fr 1fr 1fr 1fr}
+.card-grid.cols-5{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+.card{background:var(--white);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow);text-align:center;transition:transform .2s}
+.card .card-icon{font-size:2.2rem;margin-bottom:14px;display:block}
+.card .card-title{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.5}
+.card .card-desc{font-size:.88rem;color:var(--gray-500);line-height:1.6}
+.card-accent{border-top:4px solid var(--blue)}
+.card-green{border-top:4px solid var(--green)}
+.card-amber{border-top:4px solid var(--amber)}
+.card-sky{border-top:4px solid var(--sky)}
+.card-red{border-top:4px solid var(--red)}
+
+/* Dark card */
+.card-dark{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--white);backdrop-filter:blur(10px)}
+.card-dark .card-title{color:var(--white)}
+.card-dark .card-desc{color:rgba(255,255,255,.7)}
+
+/* Flow */
+.flow{display:flex;align-items:center;gap:0;width:100%;max-width:1100px;justify-content:center;flex-wrap:nowrap}
+.flow-step{background:var(--white);border-radius:var(--radius-sm);padding:20px 16px;box-shadow:var(--shadow);text-align:center;flex:1;min-width:0}
+.flow-step .step-num{width:36px;height:36px;border-radius:50%;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;margin-bottom:10px}
+.flow-step .step-label{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.5}
+.flow-step .step-desc{font-size:.78rem;color:var(--gray-500);margin-top:6px;line-height:1.5}
+.flow-arrow{font-size:1.6rem;color:var(--blue);padding:0 6px;flex-shrink:0}
+
+/* Pillars */
+.pillars{display:flex;gap:40px;justify-content:center;align-items:stretch;margin-top:30px}
+.pillar{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius);padding:30px 28px;text-align:center;flex:1;max-width:280px}
+.pillar .pillar-icon{font-size:2.4rem;margin-bottom:12px}
+.pillar .pillar-title{font-size:1.2rem;font-weight:700}
+
+/* Timeline */
+.timeline{display:flex;width:100%;max-width:1100px;position:relative;gap:0}
+.timeline::before{content:'';position:absolute;top:50%;right:0;left:0;height:4px;background:linear-gradient(to left,var(--navy),var(--blue),var(--sky),var(--cyan),var(--green));border-radius:2px;transform:translateY(-50%)}
+.timeline-phase{flex:1;position:relative;padding:0 8px;text-align:center}
+.timeline-dot{width:20px;height:20px;border-radius:50%;margin:0 auto 16px;position:relative;z-index:2;border:3px solid var(--white);box-shadow:0 0 0 3px var(--blue)}
+.timeline-card{background:var(--white);border-radius:var(--radius-sm);padding:16px 12px;box-shadow:var(--shadow);margin-top:20px}
+.timeline-card .phase-name{font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.timeline-card .phase-dur{font-size:.8rem;color:var(--blue);font-weight:600;margin-bottom:6px}
+.timeline-card .phase-desc{font-size:.78rem;color:var(--gray-500);line-height:1.5}
+.timeline-card .phase-icon{width:46px;height:46px;border-radius:14px;margin:-40px auto 8px;background:linear-gradient(135deg,var(--blue),var(--sky));display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 8px 18px rgba(37,99,235,.35);border:3px solid #fff;animation:pulseRing 2.4s infinite}
+.timeline-card .phase-out{margin-top:10px;padding-top:8px;border-top:1px dashed var(--gray-200);font-size:.68rem;color:var(--blue);line-height:1.6;font-weight:600}
+.timeline-card{margin-top:44px;padding-top:0}
+.timeline .timeline-dot{display:none}
+
+/* Comparison */
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:40px;width:100%;max-width:1000px}
+.comp-col{border-radius:var(--radius);padding:32px 28px}
+.comp-col.comp-bad{background:#fef2f2;border:2px solid #fecaca}
+.comp-col.comp-good{background:#f0fdf4;border:2px solid #bbf7d0}
+.comp-col h3{font-size:1.2rem;font-weight:700;margin-bottom:20px;text-align:center}
+.comp-col ul{list-style:none;padding:0}
+.comp-col ul li{padding:10px 0;font-size:.95rem;line-height:1.6;border-bottom:1px solid rgba(0,0,0,.06)}
+.comp-col ul li::before{margin-left:8px;font-weight:700}
+.comp-bad ul li::before{content:'✗';color:var(--red)}
+.comp-good ul li::before{content:'✓';color:var(--green)}
+
+/* Ecosystem triangle */
+.eco-triangle{position:relative;width:500px;height:420px;margin:0 auto}
+.eco-node{position:absolute;background:var(--white);border-radius:50%;width:130px;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);border:3px solid var(--blue);z-index:3}
+.eco-node .eco-icon{font-size:2rem;margin-bottom:6px}
+.eco-node .eco-label{font-size:.9rem;font-weight:700;color:var(--navy)}
+.eco-node.top{top:0;left:50%;transform:translateX(-50%)}
+.eco-node.left{bottom:20px;right:20px}
+.eco-node.right{bottom:20px;left:20px}
+.eco-arrow{position:absolute;z-index:1}
+.eco-line{position:absolute;background:var(--blue);opacity:.3;z-index:1}
+.eco-line.l1{top:115px;left:50%;width:3px;height:200px;transform:translateX(-50%) rotate(30deg);transform-origin:top center}
+.eco-line.l2{top:115px;left:50%;width:3px;height:200px;transform:translateX(-50%) rotate(-30deg);transform-origin:top center}
+.eco-line.l3{bottom:80px;left:140px;width:220px;height:3px}
+.eco-labels{display:flex;justify-content:space-around;margin-top:16px;max-width:500px;margin-inline:auto}
+.eco-tag{font-size:.78rem;color:var(--blue);font-weight:600;background:#eff6ff;padding:4px 12px;border-radius:20px}
+
+/* Architecture */
+.arch{width:100%;max-width:1100px}
+.arch-layer{display:flex;gap:12px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.arch-box{background:var(--white);border-radius:var(--radius-sm);padding:14px 18px;box-shadow:var(--shadow);text-align:center;font-size:.82rem;font-weight:600;color:var(--navy);border-right:4px solid var(--blue);min-width:120px}
+.arch-box.gateway{background:var(--blue);color:#fff;border:none;font-size:.95rem;padding:14px 40px}
+.arch-box.db{border-right-color:var(--green)}
+.arch-box.ext{border-right-color:var(--amber)}
+.arch-connector{text-align:center;color:var(--gray-400);font-size:1.2rem;margin:4px 0}
+.arch-label{font-size:.75rem;color:var(--gray-400);text-align:center;margin-bottom:6px;font-weight:600;letter-spacing:.5px}
+
+/* Module grid */
+.mod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;width:100%;max-width:1100px}
+.mod-card{background:var(--white);border-radius:var(--radius-sm);padding:16px 12px;box-shadow:var(--shadow);text-align:center;border-top:3px solid var(--blue)}
+.mod-card .mod-icon{font-size:1.4rem;margin-bottom:6px}
+.mod-card .mod-name{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.mod-card .mod-desc{font-size:.7rem;color:var(--gray-500);line-height:1.4}
+
+/* Security bars */
+.sec-bars{display:flex;gap:16px;width:100%;max-width:1100px;justify-content:center}
+.sec-bar{background:var(--white);border-radius:var(--radius);padding:24px 16px;box-shadow:var(--shadow);text-align:center;flex:1;border-bottom:5px solid var(--blue);display:flex;flex-direction:column;align-items:center;gap:10px}
+.sec-bar .sec-icon{font-size:2rem}
+.sec-bar .sec-title{font-size:.88rem;font-weight:700;color:var(--navy);line-height:1.5}
+.sec-bar .sec-desc{font-size:.75rem;color:var(--gray-500);line-height:1.5}
+
+/* Dashboard wireframe */
+.dash{width:100%;max-width:900px;background:var(--gray-50);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-lg);border:1px solid var(--gray-200)}
+.dash-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.dash-kpi{background:var(--white);border-radius:var(--radius-sm);padding:16px;text-align:center;border-right:4px solid var(--blue)}
+.dash-kpi .kpi-val{font-size:1.5rem;font-weight:800;color:var(--navy)}
+.dash-kpi .kpi-label{font-size:.75rem;color:var(--gray-500);margin-top:4px}
+.dash-charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.dash-chart{background:var(--white);border-radius:var(--radius-sm);padding:20px;min-height:120px;display:flex;align-items:flex-end;gap:8px;border:1px solid var(--gray-200)}
+.dash-bar{background:linear-gradient(to top,var(--blue),var(--sky));border-radius:4px 4px 0 0;flex:1}
+.dash-line{width:100%;height:80px;position:relative;overflow:hidden}
+.dash-line::after{content:'';position:absolute;bottom:10px;right:0;width:100%;height:60px;border:2px solid var(--blue);border-radius:0 0 60% 40%;border-top:none;border-right:none}
+.dash-table{background:var(--white);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--gray-200)}
+.dash-table-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:.78rem;color:var(--gray-600)}
+
+/* Risk */
+.risk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;width:100%;max-width:1100px}
+.risk-card{border-radius:var(--radius);padding:22px 16px;box-shadow:var(--shadow);text-align:center;background:var(--white)}
+.risk-card .risk-level{display:inline-block;padding:3px 14px;border-radius:20px;font-size:.72rem;font-weight:700;color:#fff;margin-bottom:12px}
+.risk-high{background:var(--red)}
+.risk-med{background:var(--amber)}
+.risk-card .risk-title{font-size:.92rem;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.5}
+.risk-card .risk-mit{font-size:.78rem;color:var(--gray-500);line-height:1.5}
+
+/* MVP columns */
+.mvp-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;width:100%;max-width:1100px}
+.mvp-col{border-radius:var(--radius);padding:28px 22px;box-shadow:var(--shadow);background:var(--white)}
+.mvp-col h3{font-size:1.1rem;font-weight:700;margin-bottom:16px;text-align:center;line-height:1.5}
+.mvp-col ul{list-style:none;padding:0}
+.mvp-col ul li{padding:8px 0;font-size:.88rem;line-height:1.6;border-bottom:1px solid var(--gray-100);color:var(--gray-700)}
+.mvp-green{border-top:5px solid var(--green)}
+.mvp-amber{border-top:5px solid var(--amber)}
+.mvp-blue{border-top:5px solid var(--sky)}
+
+/* Revenue */
+.rev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:100%;max-width:1050px}
+.rev-card{background:var(--white);border-radius:var(--radius);padding:24px 18px;box-shadow:var(--shadow);text-align:center;position:relative}
+.rev-card .rev-icon{font-size:2rem;margin-bottom:10px}
+.rev-card .rev-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.5}
+.rev-card .rev-desc{font-size:.82rem;color:var(--gray-500);line-height:1.5;margin-bottom:12px}
+.rev-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:700;color:#fff}
+.rev-badge.pri-high{background:var(--green)}
+.rev-badge.pri-med{background:var(--amber)}
+.rev-badge.pri-low{background:var(--gray-400)}
+
+/* Wireframe mobile */
+.wireframe{width:280px;background:var(--white);border-radius:28px;box-shadow:var(--shadow-lg);overflow:hidden;border:2px solid var(--gray-200);margin:0 auto}
+.wf-header{height:100px;background:linear-gradient(135deg,var(--blue),var(--sky));position:relative}
+.wf-avatar{width:56px;height:56px;border-radius:50%;background:var(--white);border:3px solid var(--white);position:absolute;bottom:-28px;right:20px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.wf-body{padding:40px 18px 20px}
+.wf-name{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.wf-cat{font-size:.72rem;color:var(--gray-400);margin-bottom:14px}
+.wf-section{margin-bottom:14px}
+.wf-section-title{font-size:.72rem;font-weight:700;color:var(--blue);margin-bottom:6px;border-bottom:1px solid var(--gray-100);padding-bottom:4px}
+.wf-item{height:10px;background:var(--gray-100);border-radius:5px;margin-bottom:6px}
+.wf-item.w70{width:70%}.wf-item.w50{width:50%}.wf-item.w90{width:90%}.wf-item.w40{width:40%}
+.wf-campaign{background:#eff6ff;border-radius:8px;padding:10px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.wf-camp-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.wf-camp-line{height:8px;background:var(--gray-200);border-radius:4px;flex:1}
+
+/* Content moderation flow */
+.mod-flow{display:flex;align-items:center;gap:0;width:100%;max-width:1050px;justify-content:center}
+.mod-node{border-radius:var(--radius-sm);padding:16px 14px;text-align:center;min-width:110px;font-size:.85rem;font-weight:600;color:#fff}
+.mod-node.n-gray{background:var(--gray-400)}
+.mod-node.n-blue{background:var(--blue)}
+.mod-node.n-amber{background:var(--amber)}
+.mod-node.n-green{background:var(--green)}
+.mod-node.n-red{background:var(--red)}
+.mod-arrow{color:var(--gray-400);font-size:1.4rem;padding:0 4px}
+
+/* AI steps */
+.ai-steps{display:flex;align-items:flex-end;gap:20px;justify-content:center;width:100%;max-width:800px}
+.ai-step{background:var(--white);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);text-align:center;flex:1}
+.ai-step.step-1{min-height:180px}
+.ai-step.step-2{min-height:260px}
+.ai-step h4{font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.5}
+.ai-step ul{list-style:none;padding:0;text-align:right}
+.ai-step ul li{font-size:.82rem;color:var(--gray-600);padding:4px 0;line-height:1.5}
+
+/* KPI targets */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:1000px}
+.kpi-card{background:var(--white);border-radius:var(--radius);padding:24px 18px;box-shadow:var(--shadow);text-align:center;border-right:5px solid var(--blue)}
+.kpi-card .kpi-icon{font-size:2rem;margin-bottom:8px}
+.kpi-card .kpi-name{font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.5}
+.kpi-card .kpi-target{font-size:.78rem;color:var(--gray-500);line-height:1.5}
+
+/* Confidential badge */
+.badge{position:absolute;top:30px;left:40px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:6px 16px;font-size:.72rem;font-weight:600;letter-spacing:.5px;color:rgba(255,255,255,.7);z-index:5}
+
+/* Geometric accents */
+.geo-accent{position:absolute;z-index:0;pointer-events:none}
+.geo-1{top:-100px;left:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.12) 0%,transparent 70%)}
+.geo-2{bottom:-80px;right:-80px;width:300px;height:300px;border:2px solid rgba(255,255,255,.06);border-radius:50%}
+.geo-3{bottom:100px;right:100px;width:150px;height:150px;border:2px solid rgba(255,255,255,.04);border-radius:50%}
+.geo-4{top:60px;left:40px;width:80px;height:80px;border:2px solid rgba(255,255,255,.08);transform:rotate(45deg)}
+
+/* Navigation */
+.nav{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:16px;background:rgba(26,39,68,.92);backdrop-filter:blur(12px);padding:10px 24px;border-radius:40px;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.8);font-size:1.1rem;cursor:pointer;padding:6px 10px;border-radius:8px;transition:background .2s}
+.nav-btn:hover{background:rgba(255,255,255,.15)}
+.nav-counter{color:rgba(255,255,255,.7);font-size:.85rem;font-family:'Vazirmatn',sans-serif;min-width:60px;text-align:center;direction:ltr}
+.nav-progress{position:fixed;top:0;right:0;height:3px;background:linear-gradient(to left,var(--blue),var(--sky));z-index:100;transition:width .4s ease}
+
+/* Floating control capsule */
+.orb-nav{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:110;display:flex;align-items:center;gap:6px;background:rgba(10,16,32,.78);backdrop-filter:blur(16px);padding:8px;border-radius:50px;box-shadow:0 14px 36px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.08)}
+.orb-btn{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s,background .3s,box-shadow .3s;flex-shrink:0}
+.orb-btn svg{width:17px;height:17px}
+.orb-btn:hover{background:linear-gradient(135deg,var(--blue),var(--sky));box-shadow:0 6px 18px rgba(37,99,235,.5);transform:scale(1.08)}
+.orb-btn:active{transform:scale(.94)}
+.orb-info{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:168px;padding:0 6px;gap:2px}
+.orb-chapter{font-size:.62rem;font-weight:700;color:var(--sky);letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:168px}
+.orb-count{display:flex;align-items:center;gap:8px}
+.orb-count-txt{font-size:.72rem;color:rgba(255,255,255,.55);direction:ltr;font-family:'Courier New',monospace}
+.orb-mini-dots{display:flex;gap:4px}
+.orb-mini-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s,transform .3s}
+.orb-mini-dots span.on{background:var(--sky);box-shadow:0 0 6px var(--sky);transform:scale(1.3)}
+.orb-fullscreen{width:34px;height:34px;font-size:.85rem}
+
+/* ===== Collapsible sidebar table of contents ===== */
+.toc-toggle{position:fixed;top:22px;right:22px;z-index:140;width:46px;height:46px;border-radius:14px;background:rgba(10,16,32,.75);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .25s,background .3s,box-shadow .3s}
+.toc-toggle:hover{background:linear-gradient(135deg,var(--blue),var(--sky));box-shadow:0 10px 26px rgba(37,99,235,.45);transform:translateY(-2px)}
+.toc-toggle svg{width:20px;height:20px;transition:transform .3s}
+.toc-toggle.open svg{transform:rotate(90deg)}
+.toc-overlay{position:fixed;inset:0;background:rgba(5,9,20,.5);backdrop-filter:blur(2px);z-index:129;opacity:0;pointer-events:none;transition:opacity .35s}
+.toc-overlay.open{opacity:1;pointer-events:auto}
+.toc-sidebar{position:fixed;top:0;bottom:0;right:0;width:320px;max-width:86vw;background:linear-gradient(180deg,#0b1220,#0e1729 60%,#0b1220);border-right:1px solid rgba(255,255,255,.08);z-index:135;transform:translateX(100%);transition:transform .45s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:-24px 0 60px rgba(0,0,0,.4);direction:rtl}
+.toc-sidebar.open{transform:translateX(0)}
+.toc-head{padding:24px 20px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.toc-head h3{font-size:1rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px;margin:0}
+.toc-head-sub{font-size:.68rem;color:rgba(255,255,255,.4);margin-top:4px}
+.toc-close{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.06);border:none;color:rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0}
+.toc-close:hover{background:rgba(239,68,68,.25);color:#fca5a5}
+.toc-close svg{width:16px;height:16px}
+.toc-progress-mini{margin:0 20px 14px;height:4px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;flex-shrink:0}
+.toc-progress-mini .bar{height:100%;background:linear-gradient(90deg,var(--sky),var(--blue));border-radius:3px;transition:width .4s cubic-bezier(.16,1,.3,1)}
+.toc-body{flex:1;overflow-y:auto;padding:4px 12px 20px;scrollbar-width:thin}
+.toc-body::-webkit-scrollbar{width:6px}
+.toc-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
+.toc-group{margin:6px 0;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.toc-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;gap:10px;-webkit-tap-highlight-color:transparent}
+.toc-group-head:hover{background:rgba(255,255,255,.05)}
+.toc-group-title{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:700;color:rgba(255,255,255,.85)}
+.toc-group-badge{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--sky));display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;color:#fff;flex-shrink:0;font-family:'Courier New',monospace}
+.toc-group.active .toc-group-badge{animation:pulseRing 2.2s infinite}
+.toc-group-chevron{color:rgba(255,255,255,.4);transition:transform .3s;font-size:.65rem;flex-shrink:0}
+.toc-group.open .toc-group-chevron{transform:rotate(180deg)}
+.toc-group-list{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.16,1,.3,1)}
+.toc-group.open .toc-group-list{max-height:640px}
+.toc-item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:2px 4px 2px 8px;border-radius:10px;cursor:pointer;font-size:.78rem;color:rgba(255,255,255,.6);transition:background .2s,color .2s;position:relative}
+.toc-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.toc-item.active{background:rgba(56,189,248,.16);color:#fff}
+.toc-item.active .toc-item-num{background:var(--sky);color:#0b1220}
+.toc-item-num{width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:.64rem;font-family:'Courier New',monospace;flex-shrink:0;transition:background .2s,color .2s}
+.toc-item-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toc-item.active::before{content:'';position:absolute;left:-4px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:var(--sky);box-shadow:0 0 8px var(--sky)}
+.toc-foot{padding:12px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:.66rem;color:rgba(255,255,255,.35);text-align:center;flex-shrink:0}
+@media(max-width:768px){.toc-toggle{top:16px;right:16px;width:42px;height:42px}}
+
+/* Click zones */
+.click-zone{position:absolute;top:0;height:100%;width:15%;z-index:10;cursor:pointer}
+.click-zone.zone-next{left:0}
+.click-zone.zone-prev{right:0}
+
+/* Note/assumption */
+.note{font-size:.75rem;color:var(--gray-400);margin-top:20px;text-align:center;font-style:italic}
+.note-dark{color:rgba(255,255,255,.4)}
+
+/* Action items dark */
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:900px}
+.action-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:24px;display:flex;gap:16px;align-items:flex-start}
+.action-num{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;flex-shrink:0}
+.action-text{font-size:1rem;font-weight:500;line-height:1.7;color:rgba(255,255,255,.9)}
+
+/* Two column auth */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:30px;width:100%;max-width:1000px}
+.col-box{background:var(--white);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow)}
+.col-box h3{font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:16px;text-align:center;line-height:1.5}
+.col-box ul{list-style:none;padding:0}
+.col-box ul li{padding:8px 0;font-size:.9rem;color:var(--gray-600);border-bottom:1px solid var(--gray-100);line-height:1.6}
+.col-box ul li::before{content:'🔒';margin-left:8px}
+
+/* Stat card for opportunity */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:100%;max-width:1100px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:28px 18px;box-shadow:var(--shadow);text-align:center;border-top:4px solid var(--blue);position:relative}
+.stat-card .stat-icon{font-size:2.2rem;margin-bottom:10px}
+.stat-card .stat-val{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.5}
+.stat-card .stat-desc{font-size:.8rem;color:var(--gray-500);line-height:1.5}
+.assumption{position:absolute;top:8px;left:8px;background:var(--amber);color:#fff;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:10px}
+
+/* Campaign types */
+.camp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:900px}
+.camp-card{background:var(--white);border-radius:var(--radius);padding:22px 16px;box-shadow:var(--shadow);text-align:center}
+.camp-card .camp-icon{font-size:2rem;margin-bottom:8px}
+.camp-card .camp-name{font-size:.95rem;font-weight:700;color:var(--navy);line-height:1.5}
+
+/* Print */
+@media print{
+@page{size:16in 9in;margin:0}
+.nav,.nav-progress,.orb-nav,.toc-toggle,.toc-overlay,.toc-sidebar,.click-zone{display:none!important}
+.slide{position:relative!important;opacity:1!important;visibility:visible!important;transform:none!important;page-break-after:always;break-after:page;height:100vh;overflow:hidden}
+html,body{overflow:visible;background:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.presentation{height:auto}
+}
+html.raster-export .nav,html.raster-export .nav-progress,html.raster-export .orb-nav,html.raster-export .toc-toggle,html.raster-export .toc-overlay,html.raster-export .toc-sidebar,html.raster-export .click-zone{display:none!important}
+html.raster-export,html.raster-export body{overflow:hidden!important;background:#000}
+html.raster-export .slide{transition:none!important}
+/* Responsive */
+@media(max-width:1024px){
+.slide{padding:40px 40px}
+.slide-title{font-size:2rem}
+.card-grid.cols-4,.stat-grid{grid-template-columns:1fr 1fr}
+.mod-grid{grid-template-columns:repeat(3,1fr)}
+.risk-grid{grid-template-columns:repeat(3,1fr)}
+.flow{flex-wrap:wrap;gap:8px}
+}
+@media(max-width:768px){
+.slide{padding:30px 24px}
+.slide-title{font-size:1.5rem}
+.card-grid.cols-3,.card-grid.cols-2,.comparison,.two-col,.mvp-cols,.rev-grid,.action-grid{grid-template-columns:1fr}
+.sec-bars{flex-direction:column}
+.pillars{flex-direction:column;align-items:center}
+.timeline{flex-direction:column;gap:16px}
+.timeline::before{display:none}
+.eco-triangle{width:300px;height:300px}
+.eco-node{width:90px;height:90px}
+.eco-node .eco-label{font-size:.7rem}
+.kpi-grid{grid-template-columns:1fr 1fr}
+.dash-kpis{grid-template-columns:1fr 1fr}
+.dash-charts{grid-template-columns:1fr}
+.ai-steps{flex-direction:column;align-items:stretch}
+.camp-grid{grid-template-columns:1fr 1fr}
+.mod-flow{flex-wrap:wrap;gap:6px}
+.risk-grid{grid-template-columns:1fr 1fr}
+}
+
+/* Visual Graphic Elements */
+.svg-graphic { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.hero-graphic { width: 420px; height: 260px; }
+.chart-graphic { width: 480px; height: 220px; }
+.flow-graphic { width: 750px; height: 180px; }
+.pos-mockup { width: 240px; height: 280px; background: #1e293b; border-radius: 20px; border: 4px solid #334155; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; color: white; }
+.phone-mockup { width: 220px; height: 320px; background: #0f172a; border-radius: 30px; border: 5px solid #38bdf8; padding: 12px; box-shadow: 0 10px 30px rgba(14,165,233,0.3); text-align: center; color: white; }
+.visual-flex { display: flex; align-items: center; justify-content: center; gap: 40px; margin-top: 20px; }
+
+/* ============ DEEP VISUAL UPGRADE ============ */
+
+/* Keyframes */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes floatYsm{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(56,189,248,.55)}70%{box-shadow:0 0 0 22px rgba(56,189,248,0)}100%{box-shadow:0 0 0 0 rgba(56,189,248,0)}}
+@keyframes gradientShift{to{background-position:200% center}}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@keyframes dashFlow{to{stroke-dashoffset:-40}}
+@keyframes particleFloat{0%{transform:translateY(0) scale(.6);opacity:0}12%{opacity:.9}88%{opacity:.7}100%{transform:translateY(-160px) scale(1.1);opacity:0}}
+@keyframes cursorMove{0%,100%{left:64%;top:58%}25%{left:38%;top:34%}50%{left:70%;top:30%}75%{left:46%;top:62%}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes glowPulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Gradient / glow text */
+.grad-text{background:linear-gradient(90deg,#38bdf8,#818cf8,#34d399,#38bdf8);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradientShift 7s linear infinite}
+.glow-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(16,185,129,.6);animation:pulseRing 2s infinite}
+
+/* Floating particles (ambient background for dark slides) */
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.particle{position:absolute;bottom:-20px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.95),rgba(56,189,248,0) 70%);animation:particleFloat linear infinite}
+
+/* Reveal-on-active staggered animation for card grids */
+.slide.active .card-grid>*,.slide.active .stat-grid>*,.slide.active .risk-grid>*,.slide.active .rev-grid>*,
+.slide.active .kpi-grid>*,.slide.active .camp-grid>*,.slide.active .mod-grid>*,.slide.active .sec-bars>*,
+.slide.active .mvp-cols>*,.slide.active .action-grid>*,.slide.active .pillars>*,.slide.active .two-col>*,
+.slide.active .dash-pro-kpis>*,.slide.active .dash-pro-side>*{
+opacity:0;animation:fadeUp .65s cubic-bezier(.16,1,.3,1) forwards;
+}
+.slide.active .slide-title{animation:fadeUp .7s cubic-bezier(.16,1,.3,1) both}
+.slide.active .slide-subtitle{animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .08s both}
+.card-grid>*:nth-child(1),.stat-grid>*:nth-child(1),.risk-grid>*:nth-child(1),.rev-grid>*:nth-child(1),.kpi-grid>*:nth-child(1),.camp-grid>*:nth-child(1),.mod-grid>*:nth-child(1),.sec-bars>*:nth-child(1),.mvp-cols>*:nth-child(1),.action-grid>*:nth-child(1),.pillars>*:nth-child(1),.two-col>*:nth-child(1),.dash-pro-kpis>*:nth-child(1),.dash-pro-side>*:nth-child(1){animation-delay:.06s}
+.card-grid>*:nth-child(2),.stat-grid>*:nth-child(2),.risk-grid>*:nth-child(2),.rev-grid>*:nth-child(2),.kpi-grid>*:nth-child(2),.camp-grid>*:nth-child(2),.mod-grid>*:nth-child(2),.sec-bars>*:nth-child(2),.mvp-cols>*:nth-child(2),.action-grid>*:nth-child(2),.pillars>*:nth-child(2),.two-col>*:nth-child(2),.dash-pro-kpis>*:nth-child(2),.dash-pro-side>*:nth-child(2){animation-delay:.13s}
+.card-grid>*:nth-child(3),.stat-grid>*:nth-child(3),.risk-grid>*:nth-child(3),.rev-grid>*:nth-child(3),.kpi-grid>*:nth-child(3),.camp-grid>*:nth-child(3),.mod-grid>*:nth-child(3),.sec-bars>*:nth-child(3),.mvp-cols>*:nth-child(3),.action-grid>*:nth-child(3),.pillars>*:nth-child(3),.dash-pro-kpis>*:nth-child(3),.dash-pro-side>*:nth-child(3){animation-delay:.2s}
+.card-grid>*:nth-child(4),.stat-grid>*:nth-child(4),.risk-grid>*:nth-child(4),.rev-grid>*:nth-child(4),.kpi-grid>*:nth-child(4),.camp-grid>*:nth-child(4),.mod-grid>*:nth-child(4),.sec-bars>*:nth-child(4),.dash-pro-kpis>*:nth-child(4),.dash-pro-side>*:nth-child(4){animation-delay:.27s}
+.card-grid>*:nth-child(5),.stat-grid>*:nth-child(5),.risk-grid>*:nth-child(5),.rev-grid>*:nth-child(5),.kpi-grid>*:nth-child(5),.camp-grid>*:nth-child(5),.mod-grid>*:nth-child(5),.sec-bars>*:nth-child(5),.dash-pro-side>*:nth-child(5){animation-delay:.34s}
+.card-grid>*:nth-child(6),.kpi-grid>*:nth-child(6),.mod-grid>*:nth-child(6),.sec-bars>*:nth-child(6){animation-delay:.41s}
+.mod-grid>*:nth-child(7){animation-delay:.48s}.mod-grid>*:nth-child(8){animation-delay:.55s}.mod-grid>*:nth-child(9){animation-delay:.62s}.mod-grid>*:nth-child(10){animation-delay:.69s}
+
+/* Ambient floating on hero icons */
+.float-el{animation:floatY 4.5s ease-in-out infinite}
+.float-el.d2{animation-delay:.6s}
+.float-el.d3{animation-delay:1.2s}
+
+/* Card hover polish */
+.card,.stat-card,.rev-card,.risk-card,.kpi-card,.camp-card,.mod-card,.sec-bar{transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
+.card:hover,.stat-card:hover,.rev-card:hover,.risk-card:hover,.kpi-card:hover,.camp-card:hover,.mod-card:hover,.sec-bar:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+
+/* Pulsing ecosystem nodes + traveling data dots */
+.eco-node{animation:floatY 5s ease-in-out infinite}
+.eco-node.top{animation-delay:0s}
+.eco-node.left{animation-delay:.8s}
+.eco-node.right{animation-delay:1.6s}
+.eco-node::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(37,99,235,.35);animation:pulseRing 2.6s infinite}
+
+/* Architecture flow pulses */
+.arch-box.gateway{position:relative;animation:pulseRing 2.4s infinite}
+.arch-connector{position:relative}
+.arch-connector .flow-dot{position:absolute;right:50%;top:0;width:6px;height:6px;border-radius:50%;background:var(--sky);animation:archDrop 1.6s ease-in infinite}
+@keyframes archDrop{0%{transform:translateY(-6px);opacity:0}30%{opacity:1}100%{transform:translateY(22px);opacity:0}}
+
+/* ===== Browser-chrome dashboard mockup ===== */
+.browser-mock{width:100%;max-width:980px;background:#0b1220;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.05);overflow:hidden}
+.browser-bar{display:flex;align-items:center;gap:8px;padding:11px 18px;background:linear-gradient(180deg,#1e293b,#182234);border-bottom:1px solid rgba(255,255,255,.06)}
+.browser-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.browser-dot.r{background:#ef4444}.browser-dot.y{background:#f59e0b}.browser-dot.g{background:#10b981}
+.browser-url{margin-inline-start:16px;background:rgba(255,255,255,.06);color:#94a3b8;font-size:.68rem;padding:5px 16px;border-radius:20px;direction:ltr;font-family:'Courier New',monospace;flex:1;max-width:280px;text-align:center}
+.browser-live{margin-inline-start:auto;display:flex;align-items:center;gap:6px;font-size:.68rem;color:#34d399;font-weight:700}
+.dash-pro{position:relative;background:radial-gradient(ellipse at top left,#111c33 0%,#0b1220 60%);padding:22px;display:flex;gap:16px;align-items:flex-start}
+.dash-pro-side{width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.dash-pro-item{background:rgba(255,255,255,.04);border-radius:9px;padding:10px 12px;font-size:.74rem;color:#94a3b8;display:flex;align-items:center;gap:8px;border-right:3px solid transparent}
+.dash-pro-item.active-item{background:rgba(56,189,248,.14);color:#38bdf8;border-right-color:#38bdf8;font-weight:700}
+.dash-pro-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px}
+.dash-pro-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.dash-pro-kpi{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px}
+.dash-pro-kpi .k-label{font-size:.68rem;color:#7c8aa5;margin-bottom:8px}
+.dash-pro-kpi .k-val{font-size:1.4rem;font-weight:800;color:#fff;font-family:'Courier New',monospace;direction:ltr}
+.dash-pro-kpi .k-trend{font-size:.65rem;color:#34d399;margin-top:6px;font-weight:600}
+.dash-pro-charts{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+.dash-pro-card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px}
+.dash-pro-card-title{font-size:.72rem;color:#94a3b8;margin-bottom:14px;font-weight:700}
+.pro-bars{display:flex;align-items:flex-end;gap:6px;height:110px}
+.pro-bar{flex:1;background:linear-gradient(to top,#2563eb,#38bdf8);border-radius:5px 5px 0 0;height:0;transition:height 1.1s cubic-bezier(.16,1,.3,1);position:relative}
+.pro-bar::after{content:'';position:absolute;inset:0;border-radius:5px 5px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 40%)}
+.pro-donut{width:112px;height:112px;border-radius:50%;margin:6px auto;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.pro-donut::after{content:'';position:absolute;inset:16px;background:#0e1729;border-radius:50%}
+.pro-donut-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;color:#fff;z-index:2}
+.pro-legend{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;font-size:.64rem;color:#94a3b8}
+.pro-legend span{display:flex;align-items:center;gap:5px}
+.pro-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.pro-feed{display:flex;flex-direction:column;gap:10px}
+.pro-feed-row{display:flex;align-items:center;gap:9px;font-size:.72rem;color:#cbd5e1}
+.pro-feed-dot{width:8px;height:8px;border-radius:50%;background:#10b981;animation:blink 1.8s infinite;flex-shrink:0}
+.pro-feed-time{margin-inline-start:auto;color:#64748b;font-size:.62rem;direction:ltr}
+.pro-table{width:100%;border-collapse:collapse;font-size:.72rem;color:#cbd5e1}
+.pro-table th{text-align:right;color:#64748b;font-weight:600;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);font-size:.66rem}
+.pro-table td{padding:8px 8px;border-bottom:1px solid rgba(255,255,255,.05)}
+.pro-table .bar-mini{height:6px;border-radius:3px;background:linear-gradient(90deg,#38bdf8,#818cf8)}
+.mock-cursor{position:absolute;width:0;height:0;border-style:solid;border-width:0 6px 11px 6px;border-color:transparent transparent #fff transparent;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6));animation:cursorMove 5s ease-in-out infinite;z-index:8;pointer-events:none}
+.mock-cursor::after{content:'';position:absolute;top:9px;left:2px;width:8px;height:8px;border-radius:50%;background:rgba(56,189,248,.5);animation:blink 1.4s infinite}
+
+/* ===== Upgraded phone mockup ===== */
+.phone-pro{width:250px;background:#0b1220;border-radius:38px;padding:10px;box-shadow:0 25px 60px rgba(0,0,0,.4),0 0 0 2px rgba(255,255,255,.06);position:relative}
+.phone-pro-screen{background:var(--white);border-radius:28px;overflow:hidden;position:relative;min-height:440px}
+.phone-pro-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:110px;height:22px;background:#0b1220;border-radius:0 0 16px 16px;z-index:5}
+.phone-pro-status{display:flex;justify-content:space-between;padding:10px 20px 4px;font-size:.62rem;color:var(--gray-400);direction:ltr}
+.phone-pro-home{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:100px;height:4px;border-radius:3px;background:var(--gray-300)}
+.phone-cover{height:96px;background:linear-gradient(135deg,var(--blue),var(--sky));position:relative}
+.phone-cover .qr-chip{position:absolute;bottom:-16px;left:16px;background:#fff;border-radius:12px;padding:6px 10px;box-shadow:var(--shadow);font-size:.85rem}
+
+/* Section eyebrow label */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:var(--sky);letter-spacing:.5px;margin-bottom:14px;background:rgba(56,189,248,.08);padding:6px 16px;border-radius:20px;border:1px solid rgba(56,189,248,.2)}
+.eyebrow.on-light{background:#eff6ff;border-color:#dbeafe;color:var(--blue)}
+
+@media(max-width:1024px){
+.dash-pro{flex-direction:column}
+.dash-pro-side{width:100%;flex-direction:row;flex-wrap:wrap}
+.dash-pro-charts{grid-template-columns:1fr}
+.dash-pro-kpis{grid-template-columns:1fr 1fr}
+}
+
+/* ============ PRO VISUAL LAYER v2 ============ */
+.slide-content{position:relative;z-index:1}
+.bg-white::before,.bg-light::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(37,99,235,.14) 1px,transparent 1.5px);background-size:28px 28px;pointer-events:none;z-index:0;-webkit-mask-image:radial-gradient(ellipse at center,transparent 25%,#000 100%);mask-image:radial-gradient(ellipse at center,transparent 25%,#000 100%)}
+.bg-white::after,.bg-light::after{content:'';position:absolute;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.18),transparent 62%);top:-220px;left:-180px;pointer-events:none;z-index:0;animation:floatY 10s ease-in-out infinite}
+.bg-light{background:linear-gradient(135deg,#f8fafc 0%,#e0f2fe 55%,#ede9fe 100%)}
+.chapter{position:absolute;top:78px;right:44px;font-size:.72rem;font-weight:700;color:var(--gray-400);letter-spacing:.5px;z-index:5;display:flex;align-items:center;gap:10px}
+.chapter::before{content:'';width:28px;height:2px;background:linear-gradient(to left,var(--blue),var(--sky));border-radius:2px}
+.bg-navy .chapter{color:rgba(255,255,255,.45)}
+
+/* Icon badges */
+.card .card-icon,.stat-card .stat-icon,.rev-card .rev-icon,.kpi-card .kpi-icon,.camp-card .camp-icon,.sec-bar .sec-icon,.pillar .pillar-icon{width:64px;height:64px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:1.75rem;line-height:1;background:linear-gradient(135deg,#dbeafe,#e0f2fe);box-shadow:inset 0 0 0 1px rgba(37,99,235,.12),0 10px 22px rgba(37,99,235,.16);margin:0 auto 14px}
+.card-red .card-icon{background:linear-gradient(135deg,#fee2e2,#fecaca);box-shadow:inset 0 0 0 1px rgba(239,68,68,.15),0 10px 22px rgba(239,68,68,.16)}
+.card-green .card-icon{background:linear-gradient(135deg,#d1fae5,#a7f3d0);box-shadow:inset 0 0 0 1px rgba(16,185,129,.15),0 10px 22px rgba(16,185,129,.18)}
+.card-sky .card-icon{background:linear-gradient(135deg,#e0f2fe,#bae6fd);box-shadow:inset 0 0 0 1px rgba(14,165,233,.15),0 10px 22px rgba(14,165,233,.18)}
+.rev-card .rev-icon{background:linear-gradient(135deg,#fef3c7,#fde68a);box-shadow:inset 0 0 0 1px rgba(245,158,11,.15),0 10px 22px rgba(245,158,11,.18)}
+.camp-card .camp-icon{border-radius:50%}
+.camp-card{border-right:3px dashed #bfdbfe}
+.pillar .pillar-icon{width:80px;height:80px;font-size:2.2rem;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 12px 30px rgba(0,0,0,.25);animation:floatYsm 4s ease-in-out infinite}
+.pillar:nth-child(2) .pillar-icon{animation-delay:.6s}.pillar:nth-child(3) .pillar-icon{animation-delay:1.2s}
+.mod-card .mod-icon{width:42px;height:42px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;background:linear-gradient(135deg,#eff6ff,#e0f2fe);box-shadow:inset 0 0 0 1px rgba(37,99,235,.1)}
+.flow-step{position:relative;border-top:3px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(90deg,var(--blue),var(--sky));background-origin:border-box;background-clip:padding-box,border-box}
+.flow-step .step-num{background:linear-gradient(135deg,var(--blue),var(--sky));box-shadow:0 8px 16px rgba(37,99,235,.35)}
+.flow-arrow{animation:arrowNudge 1.4s ease-in-out infinite}
+@keyframes arrowNudge{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(-6px);opacity:1}}
+.mod-node{box-shadow:0 10px 24px rgba(0,0,0,.12)}
+.risk-level.risk-high{animation:glowPulse 1.8s ease-in-out infinite}
+.timeline-dot{animation:pulseRing 2.4s infinite}
+
+/* Generic stagger */
+.slide.active .stagger>*,.slide.active .flow>.flow-step,.slide.active .mod-flow>*,.slide.active .timeline>.timeline-phase,.slide.active .comparison>*{opacity:0;animation:fadeUp .6s cubic-bezier(.16,1,.3,1) forwards}
+.slide.active .stagger>*:nth-child(1),.slide.active .flow>*:nth-child(1),.slide.active .mod-flow>*:nth-child(1),.slide.active .timeline>*:nth-child(1),.slide.active .comparison>*:nth-child(1){animation-delay:.05s}
+.slide.active .stagger>*:nth-child(2),.slide.active .flow>*:nth-child(2),.slide.active .mod-flow>*:nth-child(2),.slide.active .timeline>*:nth-child(2),.slide.active .comparison>*:nth-child(2){animation-delay:.12s}
+.slide.active .stagger>*:nth-child(3),.slide.active .flow>*:nth-child(3),.slide.active .mod-flow>*:nth-child(3),.slide.active .timeline>*:nth-child(3),.slide.active .comparison>*:nth-child(3){animation-delay:.19s}
+.slide.active .stagger>*:nth-child(4),.slide.active .flow>*:nth-child(4),.slide.active .mod-flow>*:nth-child(4),.slide.active .timeline>*:nth-child(4){animation-delay:.26s}
+.slide.active .stagger>*:nth-child(5),.slide.active .flow>*:nth-child(5),.slide.active .mod-flow>*:nth-child(5),.slide.active .timeline>*:nth-child(5){animation-delay:.33s}
+.slide.active .stagger>*:nth-child(6),.slide.active .flow>*:nth-child(6),.slide.active .mod-flow>*:nth-child(6){animation-delay:.4s}
+.slide.active .stagger>*:nth-child(7),.slide.active .flow>*:nth-child(7),.slide.active .mod-flow>*:nth-child(7){animation-delay:.47s}
+.slide.active .stagger>*:nth-child(8),.slide.active .flow>*:nth-child(8),.slide.active .mod-flow>*:nth-child(8){animation-delay:.54s}
+.slide.active .flow>*:nth-child(9),.slide.active .mod-flow>*:nth-child(9){animation-delay:.61s}
+.slide.active .flow>*:nth-child(10),.slide.active .mod-flow>*:nth-child(10){animation-delay:.68s}
+.slide.active .flow>*:nth-child(11),.slide.active .mod-flow>*:nth-child(11){animation-delay:.75s}
+.slide.active .flow>*:nth-child(12){animation-delay:.82s}
+.flow-arrow{opacity:1}
+
+/* Split layout + concept art */
+.split{display:flex;align-items:center;gap:44px;width:100%;max-width:1160px}
+.split>.art{flex:0 0 330px;display:flex;justify-content:center;align-items:center}
+.split>.body{flex:1;min-width:0}
+.art svg{width:100%;height:auto;max-height:420px;overflow:visible;filter:drop-shadow(0 22px 40px rgba(37,99,235,.18))}
+.art.sm{width:200px;margin:0 auto 10px}
+.art.sm svg{max-height:200px}
+.art-float{animation:floatY 6s ease-in-out infinite}
+.slide.active .art{animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .1s both}
+.split .card-grid{max-width:none}
+.split .card{padding:20px 18px}
+.split .card .card-icon{width:52px;height:52px;font-size:1.4rem;border-radius:16px;margin-bottom:10px}
+.split .stat-grid,.split .rev-grid,.split .kpi-grid{grid-template-columns:1fr 1fr;max-width:none}
+.split .kpi-card{padding:16px 14px}
+.split .kpi-card .kpi-icon{width:48px;height:48px;font-size:1.3rem;margin-bottom:6px}
+.split .sec-bars{display:grid;grid-template-columns:repeat(3,1fr);max-width:none}
+.split .ai-steps{max-width:none}
+.comparison.with-center{grid-template-columns:1fr 210px 1fr;max-width:1120px;align-items:center;gap:28px}
+.two-col.with-center{grid-template-columns:1fr 230px 1fr;max-width:1120px;align-items:center;gap:28px}
+.journey-line{width:100%;max-width:1100px;height:26px;display:block;margin-bottom:-2px}
+.orbit-bg{position:absolute;width:960px;height:960px;left:50%;top:50%;transform:translate(-50%,-50%);opacity:.55;pointer-events:none;z-index:0}
+.timeline .rocket{position:absolute;top:-38px;right:2%;font-size:1.9rem;transform:translate(50%,0) rotate(-135deg);animation:rocketRide 9s linear infinite;z-index:3;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+@keyframes rocketRide{0%{right:2%}100%{right:98%}}
+.gauge-fill{stroke-dasharray:346;stroke-dashoffset:346}
+.slide.active .gauge-fill{animation:gaugeFill 1.8s cubic-bezier(.16,1,.3,1) .3s forwards}
+@keyframes gaugeFill{to{stroke-dashoffset:110}}
+.gauge-needle{transform-origin:150px 170px;transform:rotate(-90deg)}
+.slide.active .gauge-needle{animation:needleSwing 1.8s cubic-bezier(.16,1,.3,1) .3s forwards}
+@keyframes needleSwing{to{transform:rotate(33deg)}}
+
+/* Persona header */
+.persona{display:inline-flex;align-items:center;gap:14px;margin-bottom:12px;background:#fff;padding:8px 20px 8px 10px;border-radius:50px;box-shadow:var(--shadow)}
+.persona-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 10px 24px rgba(37,99,235,.3);animation:floatYsm 4s ease-in-out infinite}
+.persona-avatar.green{background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 10px 24px rgba(16,185,129,.3)}
+.persona-avatar.sky{background:linear-gradient(135deg,#0284c7,#7dd3fc);box-shadow:0 10px 24px rgba(14,165,233,.3)}
+.persona-text{text-align:right;line-height:1.4}
+.persona-text small{display:block;font-size:.7rem;color:var(--gray-400);font-weight:600}
+.persona-text b{font-size:.95rem;color:var(--navy);font-weight:800}
+
+/* Executive summary */
+.exec-lead{font-size:1.02rem;line-height:1.95;color:rgba(255,255,255,.82);max-width:1000px;text-align:center;margin:0 auto 18px}
+.exec-lead-grid{display:flex;align-items:stretch;justify-content:center;gap:10px;max-width:1140px;margin:0 auto 22px;flex-wrap:wrap}
+.elg-item.elg-arrow{align-self:center;color:var(--sky);font-size:1.3rem;opacity:.7;animation:arrowNudge 1.4s ease-in-out infinite;flex:0 0 auto;min-width:0;width:28px;padding:0;background:none;border:none;text-align:center}
+.elg-item{flex:1;min-width:220px;border-radius:16px;padding:14px 18px;text-align:right;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.elg-item p{font-size:.82rem;line-height:1.75;color:rgba(255,255,255,.78);margin:0}
+.elg-tag{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.3px;padding:3px 12px;border-radius:20px;margin-bottom:8px}
+.elg-now .elg-tag{background:rgba(239,68,68,.18);color:#fca5a5}
+.elg-plan .elg-tag{background:rgba(56,189,248,.18);color:#7dd3fc}
+.elg-result .elg-tag{background:rgba(16,185,129,.18);color:#6ee7b7}
+.elg-plan{background:rgba(56,189,248,.07);border-color:rgba(56,189,248,.25)}
+.elg-result{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.25)}
+@media(max-width:1024px){.elg-item.elg-arrow{transform:rotate(90deg)}.exec-lead-grid{flex-direction:column;align-items:stretch}}
+.exec-lead b{color:#7dd3fc;font-weight:800}
+.exec-numbers{display:flex;gap:16px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+.exec-numbers>div{display:flex;flex-direction:column;align-items:center;min-width:170px;padding:8px 18px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.exec-numbers b{font-size:2.1rem;font-weight:900;line-height:1.1}
+.exec-numbers span{font-size:.76rem;color:rgba(255,255,255,.65);margin-top:2px}
+.exec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%;max-width:1160px}
+.exec-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px 18px 16px;position:relative;overflow:hidden;backdrop-filter:blur(10px);text-align:right;transition:transform .3s,background .3s}
+.exec-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09)}
+.exec-card::before{content:'';position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(to left,var(--blue),var(--sky))}
+.exec-num{font-size:1.9rem;font-weight:900;color:rgba(125,211,252,.28);font-family:'Courier New',monospace;direction:ltr;text-align:left;line-height:1}
+.exec-h{font-size:1rem;font-weight:800;margin:4px 0 6px;color:#fff}
+.exec-p{font-size:.82rem;line-height:1.8;color:rgba(255,255,255,.72)}
+.exec-strip{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.exec-strip span{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);border-radius:30px;padding:7px 18px;font-size:.8rem;color:#bae6fd}
+@media(max-width:1024px){
+.split{flex-direction:column}
+.split>.art{flex:0 0 auto;width:260px}
+.exec-grid{grid-template-columns:1fr 1fr}
+.comparison.with-center,.two-col.with-center{grid-template-columns:1fr}
+.comparison.with-center .art,.two-col.with-center .art{display:none}
+.chapter{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="presentation" id="presentation">
+
+<!-- Slide 1: Cover -->
+<div class="slide bg-navy active" data-slide="1">
+<div class="particles">
+<div class="particle" style="left:8%;width:6px;height:6px;animation-duration:7s"></div>
+<div class="particle" style="left:18%;width:4px;height:4px;animation-duration:9s;animation-delay:1s"></div>
+<div class="particle" style="left:28%;width:8px;height:8px;animation-duration:6.5s;animation-delay:2s"></div>
+<div class="particle" style="left:42%;width:5px;height:5px;animation-duration:8s;animation-delay:.5s"></div>
+<div class="particle" style="left:58%;width:7px;height:7px;animation-duration:7.5s;animation-delay:1.5s"></div>
+<div class="particle" style="left:70%;width:4px;height:4px;animation-duration:9.5s;animation-delay:2.5s"></div>
+<div class="particle" style="left:82%;width:6px;height:6px;animation-duration:6.8s;animation-delay:.8s"></div>
+<div class="particle" style="left:92%;width:5px;height:5px;animation-duration:8.4s;animation-delay:1.8s"></div>
+</div>
+<div class="geo-accent geo-1"></div>
+<div class="geo-accent geo-2"></div>
+<div class="geo-accent geo-3"></div>
+<div class="geo-accent geo-4"></div>
+<span class="badge">محرمانه — CONFIDENTIAL</span>
+<div class="slide-content" style="justify-content:center;text-align:center;position:relative;z-index:2">
+<div class="eyebrow"><span class="glow-dot"></span> طرح مفهومی و نقشه راه اجرایی</div>
+<h1 style="font-size:3.1rem;font-weight:900;line-height:1.55;margin-bottom:24px">اکوسیستم شبکه تخفیف<br><span class="grad-text">و باشگاه پذیرندگان</span></h1>
+<div style="width:80px;height:4px;background:linear-gradient(to left,var(--blue),var(--sky));border-radius:2px;margin:0 auto 28px"></div>
+<p style="font-size:1.1rem;color:rgba(255,255,255,.6);margin-bottom:40px">دستگاه‌های کارتخوان — شبکه پذیرندگان</p>
+<div style="font-size:.95rem;color:rgba(255,255,255,.5)">شهریور ۱۴۰۵</div>
+
+<div style="margin-top: 30px;">
+  <svg class="hero-graphic" viewBox="0 0 500 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="250" cy="120" r="90" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 6" style="animation:spinSlow 40s linear infinite;transform-origin:250px 120px" />
+    <circle cx="250" cy="120" r="50" fill="#2563eb" fill-opacity="0.2" stroke="#60a5fa" stroke-width="3" />
+    <!-- POS Terminal Node -->
+    <g class="float-el">
+    <rect x="70" y="70" width="100" height="100" rx="16" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+    <text x="120" y="115" fill="#ffffff" font-size="28" text-anchor="middle">💳</text>
+    <text x="120" y="145" fill="#94a3b8" font-size="12" font-family="Vazirmatn" text-anchor="middle">دستگاه POS</text>
+    </g>
+    <!-- Bale App Node -->
+    <g class="float-el d2">
+    <rect x="330" y="70" width="100" height="100" rx="16" fill="#1e293b" stroke="#10b981" stroke-width="3"/>
+    <text x="380" y="115" fill="#ffffff" font-size="28" text-anchor="middle">📱</text>
+    <text x="380" y="145" fill="#94a3b8" font-size="12" font-family="Vazirmatn" text-anchor="middle">مینی‌اپ بله</text>
+    </g>
+    <!-- Center Core Node -->
+    <circle cx="250" cy="120" r="30" fill="#0ea5e9" style="animation:glowPulse 2.2s ease-in-out infinite"/>
+    <text x="250" y="126" fill="#ffffff" font-size="14" font-weight="bold" font-family="Vazirmatn" text-anchor="middle">QR Engine</text>
+    <!-- Connecting Animated Lines -->
+    <path d="M 170 120 L 220 120" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6" style="animation:dashFlow 1.2s linear infinite"/>
+    <path d="M 280 120 L 330 120" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6" style="animation:dashFlow 1.2s linear infinite"/>
+  </svg>
+</div>
+</div>
+</div>
+
+<!-- Slide 2: Executive Summary -->
+<div class="slide bg-navy" data-slide="2">
+<div class="particles">
+<div class="particle" style="left:12%;width:5px;height:5px;animation-duration:8s"></div>
+<div class="particle" style="left:35%;width:7px;height:7px;animation-duration:7s;animation-delay:1.2s"></div>
+<div class="particle" style="left:62%;width:4px;height:4px;animation-duration:9s;animation-delay:.6s"></div>
+<div class="particle" style="left:86%;width:6px;height:6px;animation-duration:7.6s;animation-delay:2s"></div>
+</div>
+<div class="geo-accent geo-1"></div>
+<div class="geo-accent geo-2"></div>
+<div class="chapter">۰۱ · خلاصه مدیریتی</div>
+<div class="slide-content" style="text-align:center">
+<div class="eyebrow"><span class="glow-dot"></span> خلاصه مدیریتی — طرح در یک نگاه</div>
+<h2 class="slide-title" style="margin-bottom:10px">این طرح دقیقاً چه می‌گوید؟</h2>
+<p class="exec-lead" style="max-width:880px">در یک جمله: می‌خواهیم شبکهٔ کارتخوان را به یک <b>پلتفرم تخفیف</b> تبدیل کنیم که پذیرنده در آن مشتری جدید می‌گیرد، مشتری در «بله» تخفیف واقعی می‌گیرد، و سازمان صاحب داده و درآمد تازه می‌شود.</p>
+<div class="exec-lead-grid stagger">
+<div class="elg-item elg-now"><span class="elg-tag">وضعیت امروز</span><p>رابطهٔ ما با پذیرنده فقط «فروش دستگاه» است؛ نه داده‌ای از او داریم، نه دلیلی برای ماندنش.</p></div>
+<div class="elg-item elg-arrow">←</div>
+<div class="elg-item elg-plan"><span class="elg-tag">پیشنهاد ما</span><p>یک پلتفرم تخفیف در «بله» می‌سازیم که پذیرنده، مشتری و سازمان را به هم وصل می‌کند.</p></div>
+<div class="elg-item elg-arrow">←</div>
+<div class="elg-item elg-result"><span class="elg-tag">نتیجه</span><p>پذیرنده وفادار می‌ماند، مشتری جذب می‌شود، سازمان درآمد و داده تازه به‌دست می‌آورد.</p></div>
+</div>
+<div class="exec-numbers stagger">
+<div><b class="grad-text">۳</b><span>ذی‌نفع اصلی در یک اکوسیستم</span></div>
+<div><b class="grad-text">۱</b><span>پلتفرم یکپارچه</span></div>
+<div><b class="grad-text">۰</b><span>نصب اپلیکیشن جدید</span></div>
+<div><b class="grad-text">۴</b><span>ماه تا عرضهٔ MVP</span></div>
+</div>
+<div class="exec-grid stagger">
+<div class="exec-card"><div class="exec-num">01</div><div class="exec-h">مسئله چیست؟</div><div class="exec-p">امروز پذیرنده هیچ دلیلی برای وفاداری ندارد و به‌راحتی و بدون هزینه به رقیب می‌رود، چون رابطه‌مان با او فقط «فروش دستگاه» است.</div></div>
+<div class="exec-card"><div class="exec-num">02</div><div class="exec-h">راه‌حل چیست؟</div><div class="exec-p">به هر پذیرنده صفحه و ابزار ساخت تخفیف می‌دهیم؛ به هر مشتری در «بله» امکان کشف و استفاده از تخفیف با QR؛ به سازمان یک پنل مدیریت و داده.</div></div>
+<div class="exec-card"><div class="exec-num">03</div><div class="exec-h">سازمان چه می‌برد؟</div><div class="exec-p">پذیرندگان ماندگارتر می‌شوند، درآمد تازه از کمپین و تبلیغات وارد می‌شود، و جایگاه‌مان از «فروشندهٔ دستگاه» به «پلتفرم رشد کسب‌وکار» ارتقا می‌یابد.</div></div>
+<div class="exec-card"><div class="exec-num">04</div><div class="exec-h">از شما چه می‌خواهیم؟</div><div class="exec-p">تأیید فاز صفر (۲ ماه تحلیل و طراحی)، تعیین مالک محصول، و تشکیل تیم برای شروع ساخت MVP با گروهی منتخب از پذیرندگان.</div></div>
+</div>
+<div class="exec-strip">
+<span>🎯 تمرکز MVP: ثبت‌نام پذیرنده · کمپین ساده · QR · مینی‌اپ مشتری</span>
+<span>🧭 اصول راهنما: کمترین اصطکاک · ارزش واقعی · معماری مستقل از بستر</span>
+</div>
+</div>
+</div>
+
+<!-- Slide 3: The Problem -->
+<div class="slide bg-white" data-slide="3">
+<div class="chapter">۰۲ · چرا این طرح</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot" style="background:var(--red)"></span> وضعیت موجود</div>
+<h2 class="slide-title">چالش‌های فعلی شبکه پذیرندگان</h2>
+<div class="split">
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="gDev" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#334155"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs>
+<circle cx="160" cy="165" r="140" fill="#fff1f2"/>
+<circle cx="160" cy="165" r="110" fill="none" stroke="#fecdd3" stroke-width="2" stroke-dasharray="6 8"/>
+<rect x="105" y="95" width="110" height="180" rx="18" fill="url(#gDev)"/>
+<rect x="120" y="112" width="80" height="52" rx="8" fill="#0ea5e9"/>
+<rect x="128" y="122" width="44" height="6" rx="3" fill="#e0f2fe"/>
+<rect x="128" y="134" width="64" height="6" rx="3" fill="#bae6fd" opacity=".7"/>
+<rect x="128" y="146" width="30" height="6" rx="3" fill="#bae6fd" opacity=".5"/>
+<g fill="#475569">
+<rect x="122" y="178" width="22" height="16" rx="4"/><rect x="149" y="178" width="22" height="16" rx="4"/><rect x="176" y="178" width="22" height="16" rx="4"/>
+<rect x="122" y="200" width="22" height="16" rx="4"/><rect x="149" y="200" width="22" height="16" rx="4"/><rect x="176" y="200" width="22" height="16" rx="4"/>
+<rect x="122" y="222" width="22" height="16" rx="4"/><rect x="149" y="222" width="22" height="16" rx="4"/><rect x="176" y="222" width="22" height="16" rx="4" fill="#10b981"/>
+</g>
+<rect x="135" y="250" width="50" height="8" rx="4" fill="#1e293b"/>
+<g fill="none" stroke="#ef4444" stroke-width="5" stroke-linecap="round" opacity=".9">
+<path d="M230 90 a40 40 0 0 1 30 -30" stroke-dasharray="10 12" style="animation:dashFlow 1.4s linear infinite"/>
+<path d="M240 112 a62 62 0 0 1 48 -48" stroke-dasharray="10 12" style="animation:dashFlow 1.4s linear infinite .3s"/>
+<path d="M250 134 a84 84 0 0 1 66 -66" stroke-dasharray="10 12" style="animation:dashFlow 1.4s linear infinite .6s"/>
+</g>
+<g style="animation:floatYsm 3s ease-in-out infinite">
+<circle cx="270" cy="52" r="22" fill="#ef4444"/>
+<path d="M261 43 l18 18 M279 43 l-18 18" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+</g>
+<g style="animation:floatYsm 4s ease-in-out infinite .5s">
+<circle cx="48" cy="120" r="20" fill="#fff" stroke="#fecaca" stroke-width="3"/><text x="48" y="127" font-size="18" text-anchor="middle">🏪</text>
+<path d="M40 150 l-14 22 M56 150 l14 22" stroke="#fca5a5" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 5"/>
+</g>
+</svg>
+</div></div>
+<div class="body">
+<div class="card-grid cols-2">
+<div class="card card-red">
+<span class="card-icon">📡</span>
+<div class="card-title">ارتباط یک‌طرفه و غیرفعال</div>
+<div class="card-desc">رابطه با پذیرنده صرفاً محدود به ارائه سخت‌افزار کارتخوان و پشتیبانی فنی</div>
+</div>
+<div class="card card-red">
+<span class="card-icon">📦</span>
+<div class="card-title">نبود ارزش‌آفرینی فراتر از کارتخوان</div>
+<div class="card-desc">هیچ ابزار یا خدمت ارزش‌افزوده‌ای برای رشد کسب‌وکار پذیرنده وجود ندارد</div>
+</div>
+<div class="card card-red">
+<span class="card-icon">📊</span>
+<div class="card-title">فقدان داده و بینش رفتاری</div>
+<div class="card-desc">عدم شناخت از رفتار، نیازها و عملکرد واقعی پذیرندگان</div>
+</div>
+<div class="card card-red">
+<span class="card-icon">🚪</span>
+<div class="card-title">ریزش بدون ابزار وفادارسازی</div>
+<div class="card-desc">مهاجرت آسان پذیرندگان به رقبا بدون هیچ هزینه سوئیچینگ</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 4: The Opportunity -->
+<div class="slide bg-light" data-slide="4">
+<div class="chapter">۰۲ · چرا این طرح</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> دارایی‌هایی که از قبل داریم</div>
+<h2 class="slide-title">فرصت پنهان در شبکه پذیرندگان</h2>
+<div class="split">
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+<defs><radialGradient id="gHub"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#2563eb"/></radialGradient></defs>
+<circle cx="160" cy="160" r="148" fill="#eff6ff"/>
+<circle cx="160" cy="160" r="112" fill="none" stroke="#dbeafe" stroke-width="2" stroke-dasharray="5 9" style="animation:spinSlow 50s linear infinite;transform-origin:160px 160px"/>
+<g stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 6" style="animation:dashFlow 1.6s linear infinite">
+<line x1="160" y1="160" x2="70" y2="80"/><line x1="160" y1="160" x2="250" y2="70"/><line x1="160" y1="160" x2="272" y2="190"/><line x1="160" y1="160" x2="200" y2="272"/><line x1="160" y1="160" x2="80" y2="252"/><line x1="160" y1="160" x2="44" y2="170"/>
+</g>
+<circle r="5" fill="#2563eb"><animateMotion dur="2.4s" repeatCount="indefinite" path="M70,80 L160,160"/></circle>
+<circle r="5" fill="#10b981"><animateMotion dur="2.4s" repeatCount="indefinite" begin=".8s" path="M272,190 L160,160"/></circle>
+<circle r="5" fill="#f59e0b"><animateMotion dur="2.4s" repeatCount="indefinite" begin="1.6s" path="M80,252 L160,160"/></circle>
+<g font-size="18" text-anchor="middle">
+<circle cx="70" cy="80" r="22" fill="#fff" stroke="#60a5fa" stroke-width="3"/><text x="70" y="87">🏪</text>
+<circle cx="250" cy="70" r="22" fill="#fff" stroke="#34d399" stroke-width="3"/><text x="250" y="77">👤</text>
+<circle cx="272" cy="190" r="22" fill="#fff" stroke="#60a5fa" stroke-width="3"/><text x="272" y="197">🏪</text>
+<circle cx="200" cy="272" r="22" fill="#fff" stroke="#34d399" stroke-width="3"/><text x="200" y="279">👤</text>
+<circle cx="80" cy="252" r="22" fill="#fff" stroke="#fbbf24" stroke-width="3"/><text x="80" y="259">💳</text>
+<circle cx="44" cy="170" r="22" fill="#fff" stroke="#60a5fa" stroke-width="3"/><text x="44" y="177">🏪</text>
+</g>
+<circle cx="160" cy="160" r="44" fill="none" stroke="#38bdf8" stroke-width="2"><animate attributeName="r" values="44;78" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="2.2s" repeatCount="indefinite"/></circle>
+<circle cx="160" cy="160" r="42" fill="url(#gHub)"/>
+<text x="160" y="171" font-size="30" text-anchor="middle">🏦</text>
+</svg>
+</div></div>
+<div class="body">
+<div class="stat-grid">
+<div class="stat-card">
+<span class="assumption">فرض</span>
+<span class="stat-icon">🏪</span>
+<div class="stat-val">هزاران پذیرنده فعال</div>
+<div class="stat-desc">یک شبکه بالقوه تخفیف آماده فعال‌سازی</div>
+</div>
+<div class="stat-card">
+<span class="assumption">فرض</span>
+<span class="stat-icon">👥</span>
+<div class="stat-val">میلیون‌ها مشتری نهایی</div>
+<div class="stat-desc">مخاطب آماده و در دسترس برای جذب</div>
+</div>
+<div class="stat-card">
+<span class="stat-icon">📱</span>
+<div class="stat-val">زیرساخت کارتخوان</div>
+<div class="stat-desc">نقطه تماس فیزیکی با هر تراکنش</div>
+</div>
+<div class="stat-card">
+<span class="stat-icon">💬</span>
+<div class="stat-val">پیام‌رسان بله</div>
+<div class="stat-desc">بستر دیجیتال آماده با میلیون‌ها کاربر</div>
+</div>
+</div>
+</div>
+</div>
+<p class="note">* اعداد دقیق نیازمند بررسی و تحلیل بازار هستند</p>
+</div>
+</div>
+
+<!-- Slide 5: Core Idea -->
+<div class="slide bg-navy" data-slide="5">
+<div class="geo-accent geo-1"></div>
+<svg class="orbit-bg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke="rgba(56,189,248,.22)" stroke-width="1.5"><circle cx="300" cy="300" r="120"/><circle cx="300" cy="300" r="200"/><circle cx="300" cy="300" r="285"/></g>
+<circle cx="300" cy="180" r="7" fill="#38bdf8"><animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="14s" repeatCount="indefinite"/></circle>
+<circle cx="300" cy="100" r="9" fill="#34d399"><animateTransform attributeName="transform" type="rotate" from="120 300 300" to="480 300 300" dur="22s" repeatCount="indefinite"/></circle>
+<circle cx="300" cy="15" r="6" fill="#818cf8"><animateTransform attributeName="transform" type="rotate" from="240 300 300" to="600 300 300" dur="32s" repeatCount="indefinite"/></circle>
+</svg>
+<div class="chapter">۰۲ · چرا این طرح</div>
+<div class="slide-content" style="text-align:center">
+<h2 class="slide-title" style="font-size:1.2rem;font-weight:500;color:var(--sky);margin-bottom:16px">ایده اصلی</h2>
+<p style="font-size:2.2rem;font-weight:800;line-height:1.7;max-width:900px;margin:0 auto 50px">تبدیل شبکه پذیرندگان کارتخوان<br>به یک اکوسیستم تخفیف و بازاریابی دیجیتال</p>
+<div style="width:60px;height:3px;background:var(--sky);border-radius:2px;margin:0 auto 40px"></div>
+<div class="pillars">
+<div class="pillar">
+<div class="pillar-icon">🏷️</div>
+<div class="pillar-title">شبکه تخفیف</div>
+</div>
+<div class="pillar">
+<div class="pillar-icon">⭐</div>
+<div class="pillar-title">باشگاه پذیرندگان</div>
+</div>
+<div class="pillar">
+<div class="pillar-icon">📲</div>
+<div class="pillar-title">پلتفرم مشتریان</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 6: Ecosystem Diagram -->
+<div class="slide bg-white" data-slide="6">
+<div class="chapter">۰۲ · چرا این طرح</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> مدل تعاملی سه‌ضلعی</div>
+<h2 class="slide-title">اکوسیستم پیشنهادی</h2>
+<div class="eco-triangle">
+<svg viewBox="0 0 500 420" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" xmlns="http://www.w3.org/2000/svg">
+<circle r="6" fill="#0ea5e9"><animateMotion dur="3s" repeatCount="indefinite" path="M250,95 L115,330"/></circle>
+<circle r="6" fill="#10b981"><animateMotion dur="3s" repeatCount="indefinite" begin="1s" path="M250,95 L385,330"/></circle>
+<circle r="6" fill="#f59e0b"><animateMotion dur="3s" repeatCount="indefinite" begin="2s" path="M115,330 L385,330"/></circle>
+</svg>
+<div class="eco-node top">
+<span class="eco-icon">🏢</span>
+<span class="eco-label">سازمان</span>
+</div>
+<div class="eco-node left">
+<span class="eco-icon">🏪</span>
+<span class="eco-label">پذیرندگان</span>
+</div>
+<div class="eco-node right">
+<span class="eco-icon">👤</span>
+<span class="eco-label">مشتریان</span>
+</div>
+<div class="eco-line l1"></div>
+<div class="eco-line l2"></div>
+<div class="eco-line l3"></div>
+</div>
+<div class="eco-labels">
+<span class="eco-tag">ابزار بازاریابی</span>
+<span class="eco-tag">تخفیف</span>
+<span class="eco-tag">داده و بینش</span>
+<span class="eco-tag">ترافیک مشتری</span>
+<span class="eco-tag">وفاداری</span>
+<span class="eco-tag">درآمد</span>
+</div>
+</div>
+</div>
+
+<!-- Slide 7: Value for Organization -->
+<div class="slide bg-white" data-slide="7">
+<div class="chapter">۰۳ · ارزش پیشنهادی</div>
+<div class="slide-content">
+<div class="persona"><div class="persona-avatar">🏢</div><div class="persona-text"><small>ذی‌نفع اول</small><b>سازمان / PSP</b></div></div>
+<h2 class="slide-title">ارزش پیشنهادی برای سازمان</h2>
+<div class="card-grid cols-3">
+<div class="card card-accent">
+<span class="card-icon">🔒</span>
+<div class="card-title">افزایش ماندگاری پذیرندگان</div>
+<div class="card-desc">کاهش نرخ ریزش با ایجاد ارزش‌افزوده مستمر</div>
+</div>
+<div class="card card-accent">
+<span class="card-icon">💰</span>
+<div class="card-title">درآمد جدید از تبلیغات و کمپین</div>
+<div class="card-desc">منابع درآمدی جدید فراتر از کارمزد تراکنش</div>
+</div>
+<div class="card card-accent">
+<span class="card-icon">📈</span>
+<div class="card-title">داده و بینش مدیریتی</div>
+<div class="card-desc">شناخت عمیق از رفتار و نیاز پذیرندگان و مشتریان</div>
+</div>
+<div class="card card-accent">
+<span class="card-icon">🏆</span>
+<div class="card-title">تقویت برند و جایگاه</div>
+<div class="card-desc">تبدیل شدن از ارائه‌دهنده سخت‌افزار به پلتفرم کسب‌وکار</div>
+</div>
+<div class="card card-accent">
+<span class="card-icon">🌐</span>
+<div class="card-title">شبکه یکپارچه کسب‌وکارها</div>
+<div class="card-desc">ایجاد اثر شبکه‌ای و افزایش ارزش پلتفرم</div>
+</div>
+<div class="card card-accent">
+<span class="card-icon">🎯</span>
+<div class="card-title">ظرفیت کمپین‌های هدفمند</div>
+<div class="card-desc">امکان اجرای کمپین‌های بازاریابی دقیق و مؤثر</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 8: Value for Merchants -->
+<div class="slide bg-light" data-slide="8">
+<div class="chapter">۰۳ · ارزش پیشنهادی</div>
+<div class="slide-content">
+<div class="persona"><div class="persona-avatar green">🏪</div><div class="persona-text"><small>ذی‌نفع دوم</small><b>پذیرندگان کارتخوان</b></div></div>
+<h2 class="slide-title">ارزش پیشنهادی برای پذیرندگان</h2>
+<div class="card-grid cols-3">
+<div class="card card-green">
+<span class="card-icon">🏠</span>
+<div class="card-title">صفحه اختصاصی کسب‌وکار</div>
+<div class="card-desc">ویترین دیجیتال حرفه‌ای با تولید خودکار محتوا</div>
+</div>
+<div class="card card-green">
+<span class="card-icon">🎨</span>
+<div class="card-title">ابزار ساخت کمپین تخفیف</div>
+<div class="card-desc">طراحی و مدیریت ساده کمپین‌های متنوع</div>
+</div>
+<div class="card card-green">
+<span class="card-icon">🧲</span>
+<div class="card-title">جذب مشتری جدید</div>
+<div class="card-desc">دسترسی به مخاطبان جدید از طریق شبکه تخفیف</div>
+</div>
+<div class="card card-green">
+<span class="card-icon">📊</span>
+<div class="card-title">تحلیل عملکرد کمپین</div>
+<div class="card-desc">داشبورد اختصاصی با آمار بازدید و نرخ تبدیل</div>
+</div>
+<div class="card card-green">
+<span class="card-icon">🤖</span>
+<div class="card-title">ابزار بازاریابی هوشمند</div>
+<div class="card-desc">پیشنهاد هوشمند قالب و محتوا با کمک AI</div>
+</div>
+<div class="card card-green">
+<span class="card-icon">👁️</span>
+<div class="card-title">دیده‌شدن در شبکه تخفیف</div>
+<div class="card-desc">حضور در شبکه‌ای با هزاران مشتری بالقوه</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 9: Value for Customers -->
+<div class="slide bg-white" data-slide="9">
+<div class="chapter">۰۳ · ارزش پیشنهادی</div>
+<div class="slide-content">
+<div class="persona"><div class="persona-avatar sky">👤</div><div class="persona-text"><small>ذی‌نفع سوم</small><b>مشتریان نهایی</b></div></div>
+<h2 class="slide-title">ارزش پیشنهادی برای مشتریان</h2>
+<div class="card-grid cols-3">
+<div class="card card-sky">
+<span class="card-icon">🗺️</span>
+<div class="card-title">کشف فروشگاه‌ها و خدمات اطراف</div>
+<div class="card-desc">یافتن بهترین کسب‌وکارهای نزدیک</div>
+</div>
+<div class="card card-sky">
+<span class="card-icon">🏷️</span>
+<div class="card-title">تخفیف‌های واقعی و قابل استفاده</div>
+<div class="card-desc">تخفیف‌های تأیید‌شده با شرایط شفاف</div>
+</div>
+<div class="card card-sky">
+<span class="card-icon">📷</span>
+<div class="card-title">تجربه ساده با QR Code</div>
+<div class="card-desc">بدون پیچیدگی، فقط نمایش QR</div>
+</div>
+<div class="card card-sky">
+<span class="card-icon">💡</span>
+<div class="card-title">پیشنهادهای متناسب</div>
+<div class="card-desc">تخفیف‌های مرتبط با سلیقه و موقعیت</div>
+</div>
+<div class="card card-sky">
+<span class="card-icon">✨</span>
+<div class="card-title">بدون نیاز به نصب اپلیکیشن جدید</div>
+<div class="card-desc">دسترسی از داخل پیام‌رسان بله</div>
+</div>
+<div class="card card-sky">
+<span class="card-icon">🔍</span>
+<div class="card-title">مشاهده شفاف شرایط تخفیف</div>
+<div class="card-desc">اطلاعات کامل قبل از استفاده</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 10: Why Bale Mini App -->
+<div class="slide bg-white" data-slide="10">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> انتخاب بستر</div>
+<h2 class="slide-title">چرا مینی‌اپ در بله؟</h2>
+<div class="comparison with-center">
+<div class="comp-col comp-bad">
+<h3>🚫 اپلیکیشن مستقل</h3>
+<ul>
+<li>هزینه بالای جذب کاربر و نصب</li>
+<li>رقابت شدید در اپ‌استورها</li>
+<li>نیاز به آپدیت مداوم</li>
+<li>اصطکاک بالای ثبت‌نام</li>
+<li>هزینه نگهداری چند پلتفرم</li>
+</ul>
+</div>
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg">
+<rect x="10" y="10" width="180" height="360" rx="30" fill="#0b1220"/>
+<rect x="20" y="20" width="160" height="340" rx="24" fill="#f8fafc"/>
+<path d="M20 44 a24 24 0 0 1 24 -24 h112 a24 24 0 0 1 24 24 v26 h-160 z" fill="#2563eb"/>
+<rect x="72" y="20" width="56" height="14" rx="7" fill="#0b1220"/>
+<text x="100" y="60" font-size="12" fill="#fff" font-weight="700" text-anchor="middle" font-family="Vazirmatn">بله</text>
+<rect x="32" y="85" width="100" height="26" rx="12" fill="#e2e8f0"/>
+<rect x="68" y="120" width="100" height="26" rx="12" fill="#bfdbfe"/>
+<rect x="32" y="155" width="80" height="26" rx="12" fill="#e2e8f0"/>
+<g style="animation:floatYsm 3.5s ease-in-out infinite">
+<rect x="32" y="200" width="136" height="112" rx="14" fill="#fff" stroke="#bfdbfe" stroke-width="2"/>
+<path d="M32 214 a14 14 0 0 1 14 -14 h108 a14 14 0 0 1 14 14 v22 h-136 z" fill="#0ea5e9"/>
+<text x="100" y="223" font-size="11" fill="#fff" font-weight="700" text-anchor="middle" font-family="Vazirmatn">مینی‌اپ شبکه تخفیف</text>
+<rect x="44" y="248" width="112" height="10" rx="5" fill="#e2e8f0"/><rect x="76" y="264" width="80" height="10" rx="5" fill="#e2e8f0"/>
+<rect x="44" y="284" width="112" height="20" rx="10" fill="#10b981"/><text x="100" y="298" font-size="10" fill="#fff" font-weight="700" text-anchor="middle" font-family="Vazirmatn">باز کردن — بدون نصب</text>
+</g>
+<rect x="70" y="346" width="60" height="4" rx="2" fill="#cbd5e1"/>
+</svg>
+</div></div>
+<div class="comp-col comp-good">
+<h3>✅ مینی‌اپ بله</h3>
+<ul>
+<li>نصب صفر — دسترسی فوری</li>
+<li>پایگاه کاربری موجود و فعال</li>
+<li>کانال نوتیفیکیشن آماده</li>
+<li>احراز هویت یکپارچه</li>
+<li>هزینه توسعه کمتر</li>
+</ul>
+</div>
+</div>
+<p class="note">معماری مستقل از بستر — امکان گسترش به سایر پلتفرم‌ها در آینده</p>
+</div>
+</div>
+
+<!-- Slide 11: Customer Experience -->
+<div class="slide bg-light" data-slide="11">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="persona"><div class="persona-avatar sky">👤</div><div class="persona-text"><small>سفر کاربر</small><b>از کشف تا استفاده در ۵ گام</b></div></div>
+<h2 class="slide-title">تجربه مشتری</h2>
+<svg class="journey-line" viewBox="0 0 1100 26" xmlns="http://www.w3.org/2000/svg"><path d="M10 13 H1090" stroke="#bfdbfe" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/><circle r="12" fill="#2563eb" opacity=".22"><animateMotion dur="4.5s" repeatCount="indefinite" path="M1090,13 L10,13"/></circle><circle r="7" fill="#2563eb"><animateMotion dur="4.5s" repeatCount="indefinite" path="M1090,13 L10,13"/></circle></svg>
+<div class="flow">
+<div class="flow-step">
+<div class="step-num">۱</div>
+<div class="step-label">کشف</div>
+<div class="step-desc">مرور فروشگاه‌ها و تخفیف‌ها</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۲</div>
+<div class="step-label">انتخاب</div>
+<div class="step-desc">انتخاب کمپین مورد نظر</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۳</div>
+<div class="step-label">دریافت QR</div>
+<div class="step-desc">تولید کد QR اختصاصی</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۴</div>
+<div class="step-label">ارائه به فروشگاه</div>
+<div class="step-desc">نمایش QR در فروشگاه</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۵</div>
+<div class="step-label">استفاده از تخفیف</div>
+<div class="step-desc">اعمال تخفیف و ثبت</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 12: Merchant Experience -->
+<div class="slide bg-white" data-slide="12">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="persona"><div class="persona-avatar green">🏪</div><div class="persona-text"><small>سفر پذیرنده</small><b>از ثبت‌نام تا مشاهده نتیجه در ۶ گام</b></div></div>
+<h2 class="slide-title">تجربه پذیرنده</h2>
+<svg class="journey-line" viewBox="0 0 1100 26" xmlns="http://www.w3.org/2000/svg"><path d="M10 13 H1090" stroke="#bbf7d0" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/><circle r="12" fill="#10b981" opacity=".22"><animateMotion dur="5s" repeatCount="indefinite" path="M1090,13 L10,13"/></circle><circle r="7" fill="#10b981"><animateMotion dur="5s" repeatCount="indefinite" path="M1090,13 L10,13"/></circle></svg>
+<div class="flow">
+<div class="flow-step">
+<div class="step-num">۱</div>
+<div class="step-label">ثبت‌نام</div>
+<div class="step-desc">ورود با شماره ترمینال</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۲</div>
+<div class="step-label">احراز هویت</div>
+<div class="step-desc">تأیید هویت خودکار</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۳</div>
+<div class="step-label">ساخت صفحه</div>
+<div class="step-desc">تکمیل پروفایل کسب‌وکار</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۴</div>
+<div class="step-label">ایجاد کمپین</div>
+<div class="step-desc">طراحی تخفیف و شرایط</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۵</div>
+<div class="step-label">اسکن QR</div>
+<div class="step-desc">تأیید استفاده مشتری</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۶</div>
+<div class="step-label">مشاهده نتایج</div>
+<div class="step-desc">داشبورد عملکرد</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 13: Admin Experience -->
+<div class="slide bg-navy" data-slide="13">
+<div class="geo-accent geo-1"></div>
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="eyebrow"><span class="glow-dot"></span> شبیه‌سازی زنده رابط مدیریتی</div>
+<h2 class="slide-title" style="font-size:2.1rem">تجربه مدیر سیستم</h2>
+<div class="browser-mock">
+<div class="browser-bar">
+<span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+<div class="browser-url">admin.discount-network.ir/dashboard</div>
+<div class="browser-live"><span class="glow-dot"></span> زنده</div>
+</div>
+<div class="dash-pro">
+<div class="dash-pro-side">
+<div class="dash-pro-item active-item">📊 داشبورد</div>
+<div class="dash-pro-item">🏪 پذیرندگان</div>
+<div class="dash-pro-item">🎯 کمپین‌ها</div>
+<div class="dash-pro-item">🛡️ بررسی محتوا</div>
+<div class="dash-pro-item">⚙️ تنظیمات</div>
+</div>
+<div class="dash-pro-main">
+<div class="dash-pro-kpis">
+<div class="dash-pro-kpi"><div class="k-label">کاربران فعال</div><div class="k-val count-up" data-target="48210">۰</div><div class="k-trend">▲ ۱۲٪ نسبت به هفته قبل</div></div>
+<div class="dash-pro-kpi"><div class="k-label">پذیرندگان</div><div class="k-val count-up" data-target="3120">۰</div><div class="k-trend">▲ ۸٪</div></div>
+<div class="dash-pro-kpi"><div class="k-label">کمپین‌های فعال</div><div class="k-val count-up" data-target="915">۰</div><div class="k-trend">▲ ۲۱٪</div></div>
+<div class="dash-pro-kpi"><div class="k-label">نرخ استفاده تخفیف</div><div class="k-val"><span class="count-up" data-target="63">۰</span>٪</div><div class="k-trend">▲ ۵٪</div></div>
+</div>
+<div class="dash-pro-charts">
+<div class="dash-pro-card">
+<div class="dash-pro-card-title">روند استفاده از کمپین‌ها — ۷ روز اخیر</div>
+<div class="pro-bars">
+<div class="pro-bar" data-h="35"></div>
+<div class="pro-bar" data-h="52"></div>
+<div class="pro-bar" data-h="44"></div>
+<div class="pro-bar" data-h="68"></div>
+<div class="pro-bar" data-h="58"></div>
+<div class="pro-bar" data-h="82"></div>
+<div class="pro-bar" data-h="94"></div>
+</div>
+</div>
+<div class="dash-pro-card">
+<div class="dash-pro-card-title">فعالیت‌های لحظه‌ای</div>
+<div class="pro-feed">
+<div class="pro-feed-row"><span class="pro-feed-dot"></span> ثبت‌نام پذیرنده جدید <span class="pro-feed-time">۰۲:۱۱</span></div>
+<div class="pro-feed-row"><span class="pro-feed-dot" style="background:#f59e0b"></span> کمپین در انتظار بررسی <span class="pro-feed-time">۰۲:۰۸</span></div>
+<div class="pro-feed-row"><span class="pro-feed-dot"></span> اسکن QR موفق <span class="pro-feed-time">۰۱:۵۹</span></div>
+<div class="pro-feed-row"><span class="pro-feed-dot" style="background:#38bdf8"></span> گزارش ماهانه آماده شد <span class="pro-feed-time">۰۱:۴۲</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mock-cursor" style="left:64%;top:58%"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 14: Business Page -->
+<div class="slide bg-white" data-slide="14">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content" style="flex-direction:row;gap:60px">
+<div style="flex:1;max-width:400px">
+<div class="eyebrow on-light"><span class="glow-dot"></span> نمونه واقعی رابط پذیرنده</div>
+<h2 class="slide-title" style="text-align:right;font-size:2rem">صفحه اختصاصی کسب‌وکار</h2>
+<p style="font-size:1rem;color:var(--gray-500);line-height:2;text-align:right">هر پذیرنده یک ویترین دیجیتال حرفه‌ای دریافت می‌کند که شامل اطلاعات کسب‌وکار، کمپین‌های فعال، کاتالوگ محصولات و اطلاعات تماس است.</p>
+<div style="margin-top:24px">
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<span class="eco-tag">لوگو و کاور</span>
+<span class="eco-tag">دسته‌بندی</span>
+<span class="eco-tag">موقعیت مکانی</span>
+<span class="eco-tag">ساعات کاری</span>
+<span class="eco-tag">کمپین‌ها</span>
+<span class="eco-tag">محصولات</span>
+</div>
+</div>
+</div>
+<div class="phone-pro float-el">
+<div class="phone-pro-screen">
+<div class="phone-pro-notch"></div>
+<div class="phone-pro-status"><span>9:41</span><span>🔋 📶</span></div>
+<div class="phone-cover">
+<span class="qr-chip">▦ QR</span>
+</div>
+<div style="padding:26px 16px 16px;text-align:right">
+<div style="display:flex;align-items:center;gap:10px;justify-content:flex-end">
+<div style="text-align:right">
+<div style="font-size:.95rem;font-weight:700;color:var(--navy)">کافه رستوران آفتاب</div>
+<div style="font-size:.68rem;color:var(--gray-400)">رستوران • تهران، ونک</div>
+</div>
+<div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--sky));flex-shrink:0;border:3px solid #fff;box-shadow:var(--shadow);margin-top:-38px"></div>
+</div>
+<div style="margin-top:16px">
+<div style="font-size:.7rem;font-weight:700;color:var(--blue);margin-bottom:8px">کمپین‌های فعال</div>
+<div style="background:#eff6ff;border-radius:10px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+<span style="font-size:.72rem;font-weight:700;color:var(--blue)">٪۲۰</span>
+<span style="font-size:.68rem;color:var(--gray-600)">تخفیف نهار روزهای زوج</span>
+<span class="glow-dot"></span>
+</div>
+<div style="background:#f0fdf4;border-radius:10px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:.72rem;font-weight:700;color:var(--green)">۵۰٪</span>
+<span style="font-size:.68rem;color:var(--gray-600)">دسر رایگان با خرید بالای ۵۰۰</span>
+<span class="glow-dot" style="background:var(--green);box-shadow:none"></span>
+</div>
+</div>
+<div style="margin-top:14px">
+<div style="font-size:.7rem;font-weight:700;color:var(--blue);margin-bottom:8px">محصولات</div>
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:46px;border-radius:8px;background:linear-gradient(135deg,#fde68a,#f59e0b)"></div>
+<div style="flex:1;height:46px;border-radius:8px;background:linear-gradient(135deg,#bae6fd,#38bdf8)"></div>
+<div style="flex:1;height:46px;border-radius:8px;background:linear-gradient(135deg,#bbf7d0,#10b981)"></div>
+</div>
+</div>
+</div>
+<div class="phone-pro-home"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 15: Campaign & Discount Types -->
+<div class="slide bg-light" data-slide="15">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> جعبه‌ابزار بازاریابی پذیرنده</div>
+<h2 class="slide-title">انواع کمپین و تخفیف</h2>
+<div class="camp-grid">
+<div class="camp-card">
+<div class="camp-icon">٪</div>
+<div class="camp-name">تخفیف درصدی</div>
+</div>
+<div class="camp-card">
+<div class="camp-icon">💵</div>
+<div class="camp-name">تخفیف مبلغی</div>
+</div>
+<div class="camp-card">
+<div class="camp-icon">🎉</div>
+<div class="camp-name">کمپین مناسبتی</div>
+</div>
+<div class="camp-card">
+<div class="camp-icon">⏰</div>
+<div class="camp-name">کمپین زمان‌دار</div>
+</div>
+<div class="camp-card">
+<div class="camp-icon">🔑</div>
+<div class="camp-name">کد تخفیف</div>
+</div>
+<div class="camp-card">
+<div class="camp-icon">📱</div>
+<div class="camp-name">QR Coupon</div>
+</div>
+</div>
+<p class="note">قالب‌های آماده بر اساس صنف پذیرنده — رستوران، خرده‌فروشی، خدمات و ...</p>
+</div>
+</div>
+
+<!-- Slide 16: QR & Redemption -->
+<div class="slide bg-white" data-slide="16">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<h2 class="slide-title" style="margin-bottom:16px">فرآیند QR و استفاده از تخفیف</h2>
+<div class="art sm">
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="gScan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef4444" stop-opacity="0"/><stop offset="1" stop-color="#ef4444" stop-opacity=".35"/></linearGradient></defs>
+<rect x="20" y="20" width="260" height="260" rx="24" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+<g fill="#1a2744"><rect x="45" y="45" width="60" height="60" rx="8"/><rect x="195" y="45" width="60" height="60" rx="8"/><rect x="45" y="195" width="60" height="60" rx="8"/></g>
+<g fill="#fff"><rect x="55" y="55" width="40" height="40" rx="5"/><rect x="205" y="55" width="40" height="40" rx="5"/><rect x="55" y="205" width="40" height="40" rx="5"/></g>
+<g fill="#1a2744"><rect x="65" y="65" width="20" height="20" rx="3"/><rect x="215" y="65" width="20" height="20" rx="3"/><rect x="65" y="215" width="20" height="20" rx="3"/></g>
+<g fill="#2563eb">
+<rect x="120" y="120" width="12" height="12" rx="2"/><rect x="150" y="120" width="12" height="12" rx="2"/><rect x="180" y="120" width="12" height="12" rx="2"/><rect x="135" y="135" width="12" height="12" rx="2"/><rect x="165" y="135" width="12" height="12" rx="2"/><rect x="120" y="150" width="12" height="12" rx="2"/><rect x="150" y="150" width="12" height="12" rx="2"/><rect x="180" y="150" width="12" height="12" rx="2"/><rect x="135" y="165" width="12" height="12" rx="2"/><rect x="165" y="165" width="12" height="12" rx="2"/><rect x="120" y="180" width="12" height="12" rx="2"/><rect x="150" y="180" width="12" height="12" rx="2"/><rect x="180" y="180" width="12" height="12" rx="2"/>
+<rect x="205" y="120" width="12" height="12" rx="2"/><rect x="235" y="120" width="12" height="12" rx="2"/><rect x="220" y="135" width="12" height="12" rx="2"/><rect x="250" y="150" width="12" height="12" rx="2"/><rect x="205" y="165" width="12" height="12" rx="2"/><rect x="235" y="165" width="12" height="12" rx="2"/><rect x="220" y="180" width="12" height="12" rx="2"/>
+<rect x="120" y="205" width="12" height="12" rx="2"/><rect x="150" y="205" width="12" height="12" rx="2"/><rect x="180" y="205" width="12" height="12" rx="2"/><rect x="135" y="220" width="12" height="12" rx="2"/><rect x="165" y="220" width="12" height="12" rx="2"/><rect x="120" y="235" width="12" height="12" rx="2"/><rect x="150" y="250" width="12" height="12" rx="2"/><rect x="180" y="250" width="12" height="12" rx="2"/>
+<rect x="205" y="205" width="12" height="12" rx="2"/><rect x="235" y="205" width="12" height="12" rx="2"/><rect x="220" y="220" width="12" height="12" rx="2"/><rect x="205" y="250" width="12" height="12" rx="2"/>
+</g>
+<rect x="30" y="10" width="240" height="40" fill="url(#gScan)"><animate attributeName="y" values="10;226;10" dur="2.6s" repeatCount="indefinite"/></rect>
+<rect x="30" y="50" width="240" height="4" rx="2" fill="#ef4444"><animate attributeName="y" values="50;266;50" dur="2.6s" repeatCount="indefinite"/></rect>
+<g fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round">
+<path d="M8 50 V20 a12 12 0 0 1 12 -12 H50"/><path d="M250 8 H280 a12 12 0 0 1 12 12 V50"/><path d="M292 250 V280 a12 12 0 0 1 -12 12 H250"/><path d="M50 292 H20 a12 12 0 0 1 -12 -12 V250"/>
+</g>
+<g style="animation:floatYsm 3s ease-in-out infinite">
+<circle cx="258" cy="258" r="26" fill="#10b981"/><path d="M246 258 l8 8 l16 -18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>
+</div>
+<svg class="journey-line" viewBox="0 0 1100 26" xmlns="http://www.w3.org/2000/svg"><path d="M10 13 H1090" stroke="#bfdbfe" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/><circle r="12" fill="#2563eb" opacity=".22"><animateMotion dur="5s" repeatCount="indefinite" path="M1090,13 L10,13"/></circle><circle r="7" fill="#2563eb"><animateMotion dur="5s" repeatCount="indefinite" path="M1090,13 L10,13"/></circle></svg>
+<div class="flow">
+<div class="flow-step">
+<div class="step-num">۱</div>
+<div class="step-label">انتخاب کمپین</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۲</div>
+<div class="step-label">تولید QR رمزنگاری‌شده</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۳</div>
+<div class="step-label">ارائه QR به پذیرنده</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۴</div>
+<div class="step-label">اسکن و اعتبارسنجی</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۵</div>
+<div class="step-label">تأیید و ثبت استفاده</div>
+</div>
+<div class="flow-arrow">←</div>
+<div class="flow-step">
+<div class="step-num">۶</div>
+<div class="step-label">گزارش‌دهی</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 17: Authentication & Trust -->
+<div class="slide bg-white" data-slide="17">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> اعتماد، پایه اکوسیستم</div>
+<h2 class="slide-title">احراز هویت و اعتماد</h2>
+<div class="two-col with-center">
+<div class="col-box" style="border-top:4px solid var(--blue)">
+<h3>🏪 احراز هویت پذیرنده</h3>
+<ul>
+<li>تطبیق با لیست سفید PSP</li>
+<li>استعلام آنلاین وضعیت ترمینال</li>
+<li>بررسی و تأیید هویت حقیقی/حقوقی</li>
+<li>تأیید شماره تماس ثبت‌شده</li>
+</ul>
+</div>
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="gSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+<circle cx="150" cy="165" r="135" fill="#eff6ff"/>
+<circle cx="150" cy="165" r="120" fill="none" stroke="#38bdf8" stroke-width="2"><animate attributeName="r" values="115;148" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0" dur="2.4s" repeatCount="indefinite"/></circle>
+<path d="M150 30 L250 70 V160 C250 230 205 275 150 295 C95 275 50 230 50 160 V70 Z" fill="url(#gSh)"/>
+<path d="M150 55 L228 86 V160 C228 215 192 252 150 268 C108 252 72 215 72 160 V86 Z" fill="#fff" opacity=".14"/>
+<path d="M112 165 l26 26 l52 -58" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<g style="animation:floatYsm 3.4s ease-in-out infinite"><rect x="14" y="48" width="74" height="30" rx="15" fill="#fff" stroke="#bfdbfe" stroke-width="2"/><text x="51" y="68" font-size="12" text-anchor="middle" fill="#2563eb" font-weight="700" font-family="Vazirmatn">OTP ✓</text></g>
+<g style="animation:floatYsm 3.4s ease-in-out infinite .8s"><rect x="212" y="202" width="74" height="30" rx="15" fill="#fff" stroke="#bbf7d0" stroke-width="2"/><text x="249" y="222" font-size="12" text-anchor="middle" fill="#059669" font-weight="700" font-family="Vazirmatn">PSP ✓</text></g>
+</svg>
+</div></div>
+<div class="col-box" style="border-top:4px solid var(--sky)">
+<h3>👤 احراز هویت مشتری</h3>
+<ul>
+<li>ورود با شماره موبایل</li>
+<li>تأیید OTP پیامکی</li>
+<li>اتصال به حساب بله</li>
+<li>پروفایل یکپارچه</li>
+</ul>
+</div>
+</div>
+<div style="margin-top:24px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+<span class="eco-tag">🛡️ QR یک‌بار‌مصرف</span>
+<span class="eco-tag">⏱️ محدودیت زمانی</span>
+<span class="eco-tag">📍 بررسی موقعیت</span>
+<span class="eco-tag">🚫 جلوگیری از تکرار</span>
+</div>
+</div>
+</div>
+
+<!-- Slide 18: Content Moderation -->
+<div class="slide bg-light" data-slide="18">
+<div class="chapter">۰۴ · تجربه محصول</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> چرخه عمر محتوای پذیرنده</div>
+<h2 class="slide-title">کنترل و تأیید محتوا</h2>
+<div class="mod-flow">
+<div class="mod-node n-gray">پیش‌نویس</div>
+<div class="mod-arrow">←</div>
+<div class="mod-node n-blue">ارسال</div>
+<div class="mod-arrow">←</div>
+<div class="mod-node n-amber">بررسی</div>
+<div class="mod-arrow">←</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="mod-node n-green">تأیید</div>
+<div class="mod-node n-red">رد</div>
+</div>
+<div class="mod-arrow">←</div>
+<div class="mod-node n-green">انتشار</div>
+<div class="mod-arrow">←</div>
+<div class="mod-node n-gray">انقضا</div>
+</div>
+<div style="margin-top:40px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+<div class="card" style="max-width:220px;padding:18px">
+<div class="card-title">بررسی خودکار</div>
+<div class="card-desc">فیلتر محتوای نامناسب با AI</div>
+</div>
+<div class="card" style="max-width:220px;padding:18px">
+<div class="card-title">بررسی دستی</div>
+<div class="card-desc">تأیید نهایی توسط تیم محتوا</div>
+</div>
+<div class="card" style="max-width:220px;padding:18px">
+<div class="card-title">قوانین صنفی</div>
+<div class="card-desc">اعتبارسنجی بر اساس دسته‌بندی</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 19: AI Role -->
+<div class="slide bg-white" data-slide="19">
+<div class="chapter">۰۵ · فناوری و معماری</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> هوش مصنوعی در خدمت پذیرنده</div>
+<h2 class="slide-title">نقش هوش مصنوعی</h2>
+<div class="split">
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+<circle cx="160" cy="150" r="140" fill="#f5f3ff"/>
+<g stroke="#c4b5fd" stroke-width="1.5" opacity=".9">
+<line x1="60" y1="80" x2="160" y2="60"/><line x1="60" y1="80" x2="160" y2="120"/><line x1="60" y1="80" x2="160" y2="180"/><line x1="60" y1="80" x2="160" y2="240"/>
+<line x1="60" y1="150" x2="160" y2="60"/><line x1="60" y1="150" x2="160" y2="120"/><line x1="60" y1="150" x2="160" y2="180"/><line x1="60" y1="150" x2="160" y2="240"/>
+<line x1="60" y1="220" x2="160" y2="60"/><line x1="60" y1="220" x2="160" y2="120"/><line x1="60" y1="220" x2="160" y2="180"/><line x1="60" y1="220" x2="160" y2="240"/>
+<line x1="160" y1="60" x2="260" y2="110"/><line x1="160" y1="60" x2="260" y2="190"/><line x1="160" y1="120" x2="260" y2="110"/><line x1="160" y1="120" x2="260" y2="190"/><line x1="160" y1="180" x2="260" y2="110"/><line x1="160" y1="180" x2="260" y2="190"/><line x1="160" y1="240" x2="260" y2="110"/><line x1="160" y1="240" x2="260" y2="190"/>
+</g>
+<circle r="4" fill="#7c3aed"><animateMotion dur="2s" repeatCount="indefinite" path="M60,80 L160,120 L260,190"/></circle>
+<circle r="4" fill="#0ea5e9"><animateMotion dur="2.4s" repeatCount="indefinite" begin=".7s" path="M60,220 L160,180 L260,110"/></circle>
+<circle r="4" fill="#10b981"><animateMotion dur="2.2s" repeatCount="indefinite" begin="1.3s" path="M60,150 L160,60 L260,110"/></circle>
+<g fill="#818cf8">
+<circle cx="60" cy="80" r="11"><animate attributeName="opacity" values="1;.4;1" dur="2s" repeatCount="indefinite"/></circle>
+<circle cx="60" cy="150" r="11"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin=".3s" repeatCount="indefinite"/></circle>
+<circle cx="60" cy="220" r="11"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin=".6s" repeatCount="indefinite"/></circle>
+<circle cx="160" cy="60" r="11" fill="#a78bfa"><animate attributeName="opacity" values="1;.5;1" dur="2s" begin=".2s" repeatCount="indefinite"/></circle>
+<circle cx="160" cy="120" r="11" fill="#a78bfa"><animate attributeName="opacity" values="1;.5;1" dur="2s" begin=".5s" repeatCount="indefinite"/></circle>
+<circle cx="160" cy="180" r="11" fill="#a78bfa"><animate attributeName="opacity" values="1;.5;1" dur="2s" begin=".8s" repeatCount="indefinite"/></circle>
+<circle cx="160" cy="240" r="11" fill="#a78bfa"><animate attributeName="opacity" values="1;.5;1" dur="2s" begin="1.1s" repeatCount="indefinite"/></circle>
+<circle cx="260" cy="110" r="14" fill="#7c3aed"/><circle cx="260" cy="190" r="14" fill="#7c3aed"/>
+</g>
+<g style="animation:floatYsm 3.2s ease-in-out infinite"><rect x="100" y="262" width="120" height="30" rx="15" fill="#fff" stroke="#ddd6fe" stroke-width="2"/><text x="160" y="282" font-size="12" font-weight="700" fill="#7c3aed" text-anchor="middle" font-family="Vazirmatn">✨ دستیار هوشمند</text></g>
+</svg>
+</div></div>
+<div class="body">
+<div class="ai-steps">
+<div class="ai-step step-1" style="border-top:5px solid var(--blue)">
+<h4>فاز اول — MVP</h4>
+<ul>
+<li>✦ تولید متن کسب‌وکار</li>
+<li>✦ تولید متن کمپین</li>
+<li>✦ پیشنهاد قالب تخفیف</li>
+</ul>
+</div>
+<div class="ai-step step-2" style="border-top:5px solid var(--sky)">
+<h4>فازهای بعدی</h4>
+<ul>
+<li>✦ شخصی‌سازی پیشنهادات</li>
+<li>✦ تحلیل هوشمند عملکرد</li>
+<li>✦ بهینه‌سازی خودکار کمپین</li>
+<li>✦ پیش‌بینی رفتار مشتری</li>
+<li>✦ تشخیص تقلب</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<p class="note">AI به‌عنوان ابزار کمکی و تسهیل‌گر، نه ویژگی اصلی محصول</p>
+</div>
+</div>
+
+<!-- Slide 20: Technical Architecture -->
+<div class="slide bg-white" data-slide="20">
+<div class="chapter">۰۵ · فناوری و معماری</div>
+<div class="slide-content">
+<h2 class="slide-title" style="font-size:2rem;margin-bottom:24px">معماری فنی</h2>
+<div class="arch">
+<div class="arch-label">کلاینت‌ها</div>
+<div class="arch-layer">
+<div class="arch-box">مینی‌اپ بله</div>
+<div class="arch-box">پنل وب پذیرنده</div>
+<div class="arch-box">پنل مدیریت</div>
+</div>
+<div class="arch-connector">↓<span class="flow-dot"></span></div>
+<div class="arch-layer">
+<div class="arch-box gateway">API Gateway</div>
+</div>
+<div class="arch-connector">↓<span class="flow-dot" style="animation-delay:.5s"></span></div>
+<div class="arch-label">سرویس‌ها</div>
+<div class="arch-layer">
+<div class="arch-box">هویت</div>
+<div class="arch-box">پذیرنده</div>
+<div class="arch-box">کمپین</div>
+<div class="arch-box">QR و کوپن</div>
+<div class="arch-box">محتوا</div>
+<div class="arch-box">نوتیفیکیشن</div>
+</div>
+<div class="arch-connector">↓</div>
+<div class="arch-label">داده و یکپارچگی</div>
+<div class="arch-layer">
+<div class="arch-box db">PostgreSQL</div>
+<div class="arch-box db">Redis</div>
+<div class="arch-box db">Object Storage</div>
+<div class="arch-box ext">بله API</div>
+<div class="arch-box ext">PSP</div>
+<div class="arch-box ext">AI Service</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 21: Modules -->
+<div class="slide bg-light" data-slide="21">
+<div class="chapter">۰۵ · فناوری و معماری</div>
+<div class="slide-content">
+<h2 class="slide-title" style="font-size:2rem;margin-bottom:20px">ماژول‌ها و زیرسیستم‌ها</h2>
+<div class="mod-grid">
+<div class="mod-card"><div class="mod-icon">🔐</div><div class="mod-name">Identity</div><div class="mod-desc">احراز هویت و مدیریت توکن</div></div>
+<div class="mod-card"><div class="mod-icon">👤</div><div class="mod-name">User Mgmt</div><div class="mod-desc">مدیریت کاربران و نقش‌ها</div></div>
+<div class="mod-card"><div class="mod-icon">🏪</div><div class="mod-name">Merchant Mgmt</div><div class="mod-desc">ثبت و مدیریت پذیرندگان</div></div>
+<div class="mod-card"><div class="mod-icon">🏠</div><div class="mod-name">Business Profile</div><div class="mod-desc">پروفایل و صفحه کسب‌وکار</div></div>
+<div class="mod-card"><div class="mod-icon">📦</div><div class="mod-name">Catalog</div><div class="mod-desc">محصولات و خدمات</div></div>
+<div class="mod-card"><div class="mod-icon">🎯</div><div class="mod-name">Campaign</div><div class="mod-desc">مدیریت کمپین تخفیف</div></div>
+<div class="mod-card"><div class="mod-icon">📱</div><div class="mod-name">Coupon & QR</div><div class="mod-desc">تولید و مدیریت کوپن</div></div>
+<div class="mod-card"><div class="mod-icon">✅</div><div class="mod-name">Redemption</div><div class="mod-desc">ثبت و اعتبارسنجی استفاده</div></div>
+<div class="mod-card"><div class="mod-icon">🛡️</div><div class="mod-name">Moderation</div><div class="mod-desc">بررسی و تأیید محتوا</div></div>
+<div class="mod-card"><div class="mod-icon">🔔</div><div class="mod-name">Notification</div><div class="mod-desc">اطلاع‌رسانی چندکاناله</div></div>
+<div class="mod-card"><div class="mod-icon">🤖</div><div class="mod-name">AI Services</div><div class="mod-desc">تولید محتوا و پیشنهاد</div></div>
+<div class="mod-card"><div class="mod-icon">📊</div><div class="mod-name">Reporting</div><div class="mod-desc">گزارش‌ها و داشبورد</div></div>
+<div class="mod-card"><div class="mod-icon">📝</div><div class="mod-name">Audit Log</div><div class="mod-desc">ثبت رویدادها و تغییرات</div></div>
+<div class="mod-card"><div class="mod-icon">⚙️</div><div class="mod-name">Admin</div><div class="mod-desc">مدیریت سیستم و تنظیمات</div></div>
+<div class="mod-card"><div class="mod-icon">🔧</div><div class="mod-name">Configuration</div><div class="mod-desc">پیکربندی و تنظیمات عمومی</div></div>
+</div>
+</div>
+</div>
+
+<!-- Slide 22: Security & Audit -->
+<div class="slide bg-white" data-slide="22">
+<div class="chapter">۰۵ · فناوری و معماری</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> دفاع لایه‌لایه</div>
+<h2 class="slide-title">امنیت و حسابرسی</h2>
+<div class="split">
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke-width="2">
+<circle cx="150" cy="150" r="130" stroke="#bfdbfe" stroke-dasharray="4 8" style="animation:spinSlow 40s linear infinite;transform-origin:150px 150px"/>
+<circle cx="150" cy="150" r="100" stroke="#93c5fd" stroke-dasharray="20 10" style="animation:spinSlow 30s linear infinite reverse;transform-origin:150px 150px"/>
+<circle cx="150" cy="150" r="70" stroke="#60a5fa" stroke-dasharray="40 14" style="animation:spinSlow 20s linear infinite;transform-origin:150px 150px"/>
+</g>
+<circle cx="150" cy="150" r="48" fill="#1a2744"/>
+<path d="M139 146 v-10 a11 11 0 0 1 22 0 v10" stroke="#38bdf8" stroke-width="5" fill="none" stroke-linecap="round"/>
+<rect x="132" y="146" width="36" height="28" rx="6" fill="#38bdf8"/>
+<circle cx="150" cy="160" r="4" fill="#0b1220"/>
+<g font-family="Vazirmatn" font-size="11" font-weight="700" text-anchor="middle">
+<rect x="122" y="4" width="56" height="24" rx="12" fill="#fff" stroke="#bfdbfe" stroke-width="2"/><text x="150" y="20" fill="#2563eb">JWT</text>
+<rect x="242" y="138" width="56" height="24" rx="12" fill="#fff" stroke="#bbf7d0" stroke-width="2"/><text x="270" y="154" fill="#059669">RBAC</text>
+<rect x="122" y="272" width="56" height="24" rx="12" fill="#fff" stroke="#fde68a" stroke-width="2"/><text x="150" y="288" fill="#d97706">TLS</text>
+<rect x="2" y="138" width="56" height="24" rx="12" fill="#fff" stroke="#e9d5ff" stroke-width="2"/><text x="30" y="154" fill="#7c3aed">Audit</text>
+</g>
+</svg>
+</div></div>
+<div class="body">
+<div class="sec-bars">
+<div class="sec-bar">
+<div class="sec-icon">🔑</div>
+<div class="sec-title">احراز هویت</div>
+<div class="sec-desc">JWT Token با انقضای کنترل‌شده</div>
+</div>
+<div class="sec-bar">
+<div class="sec-icon">👥</div>
+<div class="sec-title">کنترل دسترسی</div>
+<div class="sec-desc">RBAC — مدیر، پذیرنده، مشتری</div>
+</div>
+<div class="sec-bar">
+<div class="sec-icon">📱</div>
+<div class="sec-title">امنیت QR</div>
+<div class="sec-desc">رمزنگاری + یک‌بارمصرف + زمان‌دار</div>
+</div>
+<div class="sec-bar">
+<div class="sec-icon">🌐</div>
+<div class="sec-title">امنیت API</div>
+<div class="sec-desc">Rate Limit + Validation + CORS</div>
+</div>
+<div class="sec-bar">
+<div class="sec-icon">🗄️</div>
+<div class="sec-title">حفاظت داده</div>
+<div class="sec-desc">رمزنگاری در انتقال و ذخیره</div>
+</div>
+<div class="sec-bar">
+<div class="sec-icon">📋</div>
+<div class="sec-title">ثبت رویداد</div>
+<div class="sec-desc">Audit Trail کامل با جزئیات</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 23: Dashboard & Reports -->
+<div class="slide bg-navy" data-slide="23">
+<div class="geo-accent geo-2"></div>
+<div class="chapter">۰۵ · فناوری و معماری</div>
+<div class="slide-content">
+<div class="eyebrow"><span class="glow-dot"></span> اتاق کنترل تحلیلی سازمان</div>
+<h2 class="slide-title" style="font-size:2.1rem">داشبورد و گزارش‌ها</h2>
+<div class="browser-mock">
+<div class="browser-bar">
+<span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+<div class="browser-url">admin.discount-network.ir/reports</div>
+<div class="browser-live"><span class="glow-dot"></span> بروزرسانی خودکار</div>
+</div>
+<div class="dash-pro">
+<div class="dash-pro-main">
+<div class="dash-pro-kpis">
+<div class="dash-pro-kpi"><div class="k-label">رشد کاربران</div><div class="k-val"><span class="count-up" data-target="18">۰</span>٪</div><div class="k-trend">▲ ماه به ماه</div></div>
+<div class="dash-pro-kpi"><div class="k-label">پذیرندگان فعال</div><div class="k-val count-up" data-target="2840">۰</div><div class="k-trend">▲ ۹٪</div></div>
+<div class="dash-pro-kpi"><div class="k-label">کمپین‌های فعال</div><div class="k-val count-up" data-target="915">۰</div><div class="k-trend">▲ ۲۱٪</div></div>
+<div class="dash-pro-kpi"><div class="k-label">نرخ تبدیل</div><div class="k-val"><span class="count-up" data-target="34">۰</span>٪</div><div class="k-trend">▲ ۳٪</div></div>
+</div>
+<div class="dash-pro-charts">
+<div class="dash-pro-card">
+<div class="dash-pro-card-title">روند رشد ماهانه شبکه</div>
+<div class="pro-bars">
+<div class="pro-bar" data-h="25"></div>
+<div class="pro-bar" data-h="40"></div>
+<div class="pro-bar" data-h="38"></div>
+<div class="pro-bar" data-h="55"></div>
+<div class="pro-bar" data-h="62"></div>
+<div class="pro-bar" data-h="58"></div>
+<div class="pro-bar" data-h="75"></div>
+<div class="pro-bar" data-h="83"></div>
+<div class="pro-bar" data-h="96"></div>
+</div>
+</div>
+<div class="dash-pro-card">
+<div class="dash-pro-card-title">سهم انواع کمپین</div>
+<div class="pro-donut" style="background:conic-gradient(#38bdf8 0deg 150deg,#818cf8 150deg 230deg,#34d399 230deg 300deg,#f59e0b 300deg 360deg)">
+<div class="pro-donut-label">۱۰۰٪</div>
+</div>
+<div class="pro-legend">
+<span><i style="background:#38bdf8"></i>درصدی</span>
+<span><i style="background:#818cf8"></i>مبلغی</span>
+<span><i style="background:#34d399"></i>مناسبتی</span>
+<span><i style="background:#f59e0b"></i>سایر</span>
+</div>
+</div>
+</div>
+<div class="dash-pro-card">
+<div class="dash-pro-card-title">برترین پذیرندگان این هفته</div>
+<table class="pro-table">
+<tr><th>پذیرنده</th><th>کمپین‌ها</th><th>نرخ تبدیل</th><th>روند</th></tr>
+<tr><td>کافه رستوران آفتاب</td><td>۴</td><td>۴۲٪</td><td><div class="bar-mini" style="width:82%"></div></td></tr>
+<tr><td>فروشگاه پوشاک نگین</td><td>۳</td><td>۳۵٪</td><td><div class="bar-mini" style="width:68%"></div></td></tr>
+<tr><td>سوپرمارکت رفاه</td><td>۲</td><td>۲۹٪</td><td><div class="bar-mini" style="width:54%"></div></td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Slide 24: MVP -->
+<div class="slide bg-white" data-slide="24">
+<div class="chapter">۰۶ · اجرا و کسب‌وکار</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> اولویت‌بندی به روش MoSCoW</div>
+<h2 class="slide-title">محدوده MVP</h2>
+<div class="mvp-cols">
+<div class="mvp-col mvp-green">
+<h3>✅ ضروری — Must Have</h3>
+<ul>
+<li>ثبت‌نام و احراز هویت پذیرنده</li>
+<li>صفحه اختصاصی کسب‌وکار</li>
+<li>ایجاد کمپین تخفیف ساده</li>
+<li>تولید و اسکن QR</li>
+<li>مینی‌اپ مشتری (کشف + استفاده)</li>
+<li>پنل مدیریت پایه</li>
+</ul>
+</div>
+<div class="mvp-col mvp-amber">
+<h3>📋 مهم — Should Have</h3>
+<ul>
+<li>تولید محتوای AI</li>
+<li>نوتیفیکیشن در بله</li>
+<li>داشبورد عملکرد پذیرنده</li>
+<li>کنترل محتوا (Moderation)</li>
+<li>جستجوی موقعیت‌محور</li>
+</ul>
+</div>
+<div class="mvp-col mvp-blue">
+<h3>💡 مطلوب — Could Have</h3>
+<ul>
+<li>شخصی‌سازی پیشنهادات</li>
+<li>کاتالوگ محصولات</li>
+<li>امتیازدهی و نظرات</li>
+<li>گزارش‌های پیشرفته</li>
+</ul>
+</div>
+</div>
+<p class="note">تمرکز بر ارائه ارزش واقعی در کوتاه‌ترین زمان ممکن</p>
+</div>
+</div>
+
+<!-- Slide 25: Roadmap -->
+<div class="slide bg-navy" data-slide="25">
+<div class="geo-accent geo-1"></div>
+<div class="geo-accent geo-3"></div>
+<div class="chapter">۰۶ · اجرا و کسب‌وکار</div>
+<div class="slide-content">
+<div class="eyebrow"><span class="glow-dot"></span> پنج فاز — از طراحی تا اکوسیستم</div>
+<h2 class="slide-title">نقشه راه اجرایی</h2>
+<div class="timeline">
+<div class="rocket">🚀</div>
+<div class="timeline-phase">
+<div class="timeline-dot" style="background:var(--navy)"></div>
+<div class="timeline-card">
+<div class="phase-icon">🧭</div>
+<div class="phase-name">فاز ۰</div>
+<div class="phase-dur">۲ ماه</div>
+<div class="phase-desc">تحلیل، طراحی و معماری</div>
+<div class="phase-out">خروجی: سند الزامات · UI/UX · تفاهم با بله</div>
+</div>
+</div>
+<div class="timeline-phase">
+<div class="timeline-dot" style="background:var(--blue)"></div>
+<div class="timeline-card">
+<div class="phase-icon">🚀</div>
+<div class="phase-name">فاز ۱</div>
+<div class="phase-dur">۳-۴ ماه</div>
+<div class="phase-desc">توسعه و عرضه MVP</div>
+<div class="phase-out">خروجی: مینی‌اپ · پنل پذیرنده · QR</div>
+</div>
+</div>
+<div class="timeline-phase">
+<div class="timeline-dot" style="background:var(--sky)"></div>
+<div class="timeline-card">
+<div class="phase-icon">🧩</div>
+<div class="phase-name">فاز ۲</div>
+<div class="phase-dur">۲-۳ ماه</div>
+<div class="phase-desc">تکمیل شبکه و ابزارها</div>
+<div class="phase-out">خروجی: نوتیفیکیشن · داشبورد · جستجوی مکانی</div>
+</div>
+</div>
+<div class="timeline-phase">
+<div class="timeline-dot" style="background:var(--cyan)"></div>
+<div class="timeline-card">
+<div class="phase-icon">🤖</div>
+<div class="phase-name">فاز ۳</div>
+<div class="phase-dur">۲-۳ ماه</div>
+<div class="phase-desc">AI و شخصی‌سازی</div>
+<div class="phase-out">خروجی: پیشنهاد هوشمند · تحلیل رفتار</div>
+</div>
+</div>
+<div class="timeline-phase">
+<div class="timeline-dot" style="background:var(--green)"></div>
+<div class="timeline-card">
+<div class="phase-icon">🌐</div>
+<div class="phase-name">فاز ۴</div>
+<div class="phase-dur">مستمر</div>
+<div class="phase-desc">توسعه اکوسیستم</div>
+<div class="phase-out">خروجی: بسترهای جدید · شرکا · مقیاس</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 26: Business Model -->
+<div class="slide bg-white" data-slide="26">
+<div class="chapter">۰۶ · اجرا و کسب‌وکار</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> چهار جریان درآمدی</div>
+<h2 class="slide-title">مدل کسب‌وکار</h2>
+<div class="split">
+<div class="art"><div class="art-float">
+<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+<circle cx="160" cy="125" r="112" fill="#fffbeb"/>
+<g>
+<rect x="60" y="150" width="34" height="50" rx="6" fill="#fde68a"/>
+<rect x="110" y="120" width="34" height="80" rx="6" fill="#fcd34d"/>
+<rect x="160" y="90" width="34" height="110" rx="6" fill="#fbbf24"/>
+<rect x="210" y="55" width="34" height="145" rx="6" fill="#f59e0b"/>
+</g>
+<path d="M77 140 L127 108 L177 76 L227 42" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="6 6" style="animation:dashFlow 1.2s linear infinite"/>
+<circle cx="236" cy="34" r="16" fill="#10b981"/><path d="M236 42 V26 M229 33 l7 -7 7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<g style="animation:floatYsm 3s ease-in-out infinite">
+<ellipse cx="272" cy="196" rx="26" ry="9" fill="#d97706"/><rect x="246" y="180" width="52" height="16" fill="#f59e0b"/><ellipse cx="272" cy="180" rx="26" ry="9" fill="#fbbf24"/>
+<ellipse cx="272" cy="172" rx="26" ry="9" fill="#d97706"/><rect x="246" y="156" width="52" height="16" fill="#f59e0b"/><ellipse cx="272" cy="156" rx="26" ry="9" fill="#fde68a"/>
+<text x="272" y="160" font-size="11" font-weight="900" fill="#b45309" text-anchor="middle">﷼</text>
+</g>
+<g style="animation:floatYsm 3.6s ease-in-out infinite .6s">
+<circle cx="46" cy="70" r="22" fill="#fff" stroke="#fde68a" stroke-width="3"/><text x="46" y="78" font-size="20" text-anchor="middle">📢</text>
+</g>
+</svg>
+</div></div>
+<div class="body">
+<div class="rev-grid">
+<div class="rev-card">
+<div class="rev-icon">💳</div>
+<div class="rev-title">کارمزد کمپین</div>
+<div class="rev-desc">دریافت کارمزد از هر کمپین فعال یا استفاده‌شده</div>
+<span class="rev-badge pri-high">اولویت بالا</span>
+</div>
+<div class="rev-card">
+<div class="rev-icon">📢</div>
+<div class="rev-title">تبلیغات و جایگاه ویژه</div>
+<div class="rev-desc">فروش جایگاه ویژه و نمایش برجسته به پذیرندگان</div>
+<span class="rev-badge pri-high">اولویت بالا</span>
+</div>
+<div class="rev-card">
+<div class="rev-icon">⭐</div>
+<div class="rev-title">اشتراک پذیرندگان</div>
+<div class="rev-desc">پلن‌های اشتراکی برای دسترسی به ابزارهای پیشرفته</div>
+<span class="rev-badge pri-med">اولویت متوسط</span>
+</div>
+<div class="rev-card">
+<div class="rev-icon">🤖</div>
+<div class="rev-title">خدمات AI</div>
+<div class="rev-desc">تولید محتوای حرفه‌ای و تحلیل هوشمند پریمیوم</div>
+<span class="rev-badge pri-low">آینده</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 27: KPIs -->
+<div class="slide bg-light" data-slide="27">
+<div class="chapter">۰۶ · اجرا و کسب‌وکار</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot"></span> چگونه موفقیت را می‌سنجیم</div>
+<h2 class="slide-title">شاخص‌های کلیدی عملکرد</h2>
+<div class="split">
+<div class="art">
+<svg viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="gG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2563eb"/><stop offset=".6" stop-color="#38bdf8"/><stop offset="1" stop-color="#10b981"/></linearGradient></defs>
+<path d="M40 170 A110 110 0 0 1 260 170" stroke="#e2e8f0" stroke-width="22" fill="none" stroke-linecap="round"/>
+<path class="gauge-fill" d="M40 170 A110 110 0 0 1 260 170" stroke="url(#gG)" stroke-width="22" fill="none" stroke-linecap="round"/>
+<g fill="#94a3b8" font-size="11" font-family="Vazirmatn" text-anchor="middle"><text x="40" y="198">۰</text><text x="150" y="40">۵۰</text><text x="260" y="198">۱۰۰</text></g>
+<g class="gauge-needle"><path d="M150 170 L150 82" stroke="#1a2744" stroke-width="6" stroke-linecap="round"/><circle cx="150" cy="82" r="6" fill="#1a2744"/></g>
+<circle cx="150" cy="170" r="14" fill="#1a2744"/><circle cx="150" cy="170" r="6" fill="#38bdf8"/>
+<text x="150" y="138" font-size="22" font-weight="900" fill="#1a2744" font-family="Vazirmatn" text-anchor="middle">KPI</text>
+</svg>
+</div>
+<div class="body">
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-icon">🏪</div>
+<div class="kpi-name">پذیرندگان فعال</div>
+<div class="kpi-target">تعداد پذیرندگانی که حداقل یک کمپین فعال دارند</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-icon">🚀</div>
+<div class="kpi-name">نرخ فعال‌سازی</div>
+<div class="kpi-target">درصد پذیرندگان ثبت‌نام‌شده که کمپین ایجاد کرده‌اند</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-icon">👥</div>
+<div class="kpi-name">کاربران فعال ماهانه</div>
+<div class="kpi-target">MAU — تعداد مشتریان فعال در ۳۰ روز اخیر</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-icon">✅</div>
+<div class="kpi-name">نرخ استفاده از کمپین</div>
+<div class="kpi-target">Redemption Rate — درصد کوپن‌های استفاده‌شده</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-icon">🔄</div>
+<div class="kpi-name">نرخ بازگشت</div>
+<div class="kpi-target">درصد مشتریانی که مجدداً از تخفیف استفاده می‌کنند</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-icon">🎯</div>
+<div class="kpi-name">نرخ ایجاد کمپین</div>
+<div class="kpi-target">میانگین تعداد کمپین فعال به ازای هر پذیرنده</div>
+</div>
+</div>
+</div>
+</div>
+<p class="note">اهداف عددی پس از تحلیل بازار و مطالعه رفتار پذیرندگان تعیین خواهد شد</p>
+</div>
+</div>
+
+<!-- Slide 28: Risks -->
+<div class="slide bg-white" data-slide="28">
+<div class="chapter">۰۶ · اجرا و کسب‌وکار</div>
+<div class="slide-content">
+<div class="eyebrow on-light"><span class="glow-dot" style="background:var(--amber)"></span> نگاه واقع‌بینانه</div>
+<h2 class="slide-title">ریسک‌ها و راهکارها</h2>
+<div class="risk-grid">
+<div class="risk-card">
+<span class="risk-level risk-high">بالا</span>
+<div class="risk-title">وابستگی به پلتفرم بله</div>
+<div class="risk-mit">معماری مستقل از بستر — آمادگی برای پشتیبانی از پلتفرم‌های دیگر</div>
+</div>
+<div class="risk-card">
+<span class="risk-level risk-high">بالا</span>
+<div class="risk-title">مشارکت ضعیف پذیرندگان</div>
+<div class="risk-mit">شروع با گروه منتخب پذیرندگان — Onboarding حضوری و پشتیبانی ویژه</div>
+</div>
+<div class="risk-card">
+<span class="risk-level risk-med">متوسط</span>
+<div class="risk-title">سوءاستفاده از QR و تخفیف</div>
+<div class="risk-mit">QR رمزنگاری‌شده و یک‌بارمصرف — محدودیت زمانی و مکانی</div>
+</div>
+<div class="risk-card">
+<span class="risk-level risk-med">متوسط</span>
+<div class="risk-title">مسائل حقوقی محتوا</div>
+<div class="risk-mit">فرآیند بررسی محتوا — قوانین انتشار — مسئولیت‌پذیری پذیرنده</div>
+</div>
+<div class="risk-card">
+<span class="risk-level risk-med">متوسط</span>
+<div class="risk-title">پیچیدگی فنی</div>
+<div class="risk-mit">رویکرد MVP — اولویت‌بندی ویژگی‌ها — تیم فنی متخصص</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Slide 29: Summary & Next Steps -->
+<div class="slide bg-navy" data-slide="29">
+<div class="particles">
+<div class="particle" style="left:10%;width:6px;height:6px;animation-duration:7s"></div>
+<div class="particle" style="left:30%;width:4px;height:4px;animation-duration:9s;animation-delay:1s"></div>
+<div class="particle" style="left:52%;width:7px;height:7px;animation-duration:6.5s;animation-delay:2s"></div>
+<div class="particle" style="left:74%;width:5px;height:5px;animation-duration:8s;animation-delay:.5s"></div>
+<div class="particle" style="left:90%;width:6px;height:6px;animation-duration:7.5s;animation-delay:1.5s"></div>
+</div>
+<div class="geo-accent geo-1"></div>
+<div class="geo-accent geo-2"></div>
+<div class="chapter">۰۶ · اجرا و کسب‌وکار</div>
+<div class="slide-content" style="text-align:center">
+<div class="eyebrow"><span class="glow-dot"></span> جمع‌بندی و درخواست تصمیم</div>
+<h2 class="slide-title" style="margin-bottom:16px">گام‌های بعدی</h2>
+<p class="slide-subtitle" style="color:rgba(255,255,255,.6);margin-bottom:40px">پیشنهاد اقدامات برای شروع فاز صفر</p>
+<div class="action-grid">
+<div class="action-card">
+<div class="action-num">۱</div>
+<div class="action-text">تشکیل تیم پروژه و تعیین مالک محصول</div>
+</div>
+<div class="action-card">
+<div class="action-num">۲</div>
+<div class="action-text">نهایی‌سازی الزامات PSP و مذاکره با بله</div>
+</div>
+<div class="action-card">
+<div class="action-num">۳</div>
+<div class="action-text">طراحی UI/UX و معماری تفصیلی</div>
+</div>
+<div class="action-card">
+<div class="action-num">۴</div>
+<div class="action-text">شروع توسعه MVP</div>
+</div>
+</div>
+<div style="margin-top:50px;padding:16px 32px;background:rgba(255,255,255,.08);border-radius:30px;display:inline-block;font-size:1.1rem;font-weight:600;color:var(--sky)">
+آماده برای شروع فاز صفر ✦
+</div>
+</div>
+</div>
+
+</div><!-- /presentation -->
+
+<!-- Sidebar table of contents -->
+<button class="toc-toggle" id="tocToggle" title="فهرست محتوا">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+</button>
+<div class="toc-overlay" id="tocOverlay"></div>
+<aside class="toc-sidebar" id="tocSidebar">
+<div class="toc-head">
+<div>
+<h3>📑 فهرست محتوا</h3>
+<div class="toc-head-sub">۲۹ اسلاید · ۶ فصل</div>
+</div>
+<button class="toc-close" id="tocClose" title="بستن">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+</button>
+</div>
+<div class="toc-progress-mini"><div class="bar" id="tocProgressBar"></div></div>
+<div class="toc-body" id="tocBody"></div>
+<div class="toc-foot">کلیک روی هر عنوان برای پرش مستقیم</div>
+</aside>
+
+<div class="orb-nav">
+<button class="orb-btn" id="prevBtn" onclick="prevSlide()" title="اسلاید قبلی (→)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+</button>
+<div class="orb-info">
+<span class="orb-chapter" id="orbChapter">مقدمه</span>
+<div class="orb-count">
+<span class="orb-count-txt" id="counter">1 / 29</span>
+<div class="orb-mini-dots" id="orbDots"></div>
+</div>
+</div>
+<button class="orb-btn" id="nextBtn" onclick="nextSlide()" title="اسلاید بعدی (←)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+</button>
+<button class="orb-btn orb-fullscreen" onclick="document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()" title="تمام‌صفحه (F)">⛶</button>
+</div>
+
+<script>
+(function(){
+if(location.search.indexOf('raster-export')>-1)document.documentElement.classList.add('raster-export');
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let current=0;
+const counter=document.getElementById('counter');
+const orbChapter=document.getElementById('orbChapter');
+const orbDots=document.getElementById('orbDots');
+const tocToggle=document.getElementById('tocToggle');
+const tocOverlay=document.getElementById('tocOverlay');
+const tocSidebar=document.getElementById('tocSidebar');
+const tocClose=document.getElementById('tocClose');
+const tocBody=document.getElementById('tocBody');
+const tocProgressBar=document.getElementById('tocProgressBar');
+
+// Persian digits
+function toFa(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
+
+// Derive each slide's chapter label (falls back to "مقدمه" for the cover)
+const chapters=Array.prototype.map.call(slides,function(s){
+const c=s.querySelector('.chapter');
+if(!c)return 'مقدمه';
+const t=c.textContent;
+const sep=t.indexOf('·');
+return sep>-1?t.slice(sep+1).trim():t.trim();
+});
+
+// Build the clickable sidebar chapter groups in document order
+const chapterFirstIdx=[];
+const uniqueChapters=[];
+chapters.forEach(function(ch,i){
+if(uniqueChapters.indexOf(ch)===-1){uniqueChapters.push(ch);chapterFirstIdx.push(i)}
+});
+// Build the collapsible sidebar table of contents, grouped by chapter
+const tocGroups=[];
+const tocItems=[];
+uniqueChapters.forEach(function(ch,gi){
+const group=document.createElement('div');
+group.className='toc-group';
+const head=document.createElement('div');
+head.className='toc-group-head';
+head.innerHTML='<span class="toc-group-title"><span class="toc-group-badge">'+toFa(gi+1)+'</span>'+ch+'</span><span class="toc-group-chevron">▾</span>';
+head.addEventListener('click',function(){group.classList.toggle('open')});
+const list=document.createElement('div');
+list.className='toc-group-list';
+chapters.forEach(function(c,i){
+if(c!==ch)return;
+const h2=slides[i].querySelector('.slide-title,h1');
+const title=h2?h2.textContent.trim():'اسلاید '+toFa(i+1);
+const item=document.createElement('div');
+item.className='toc-item';
+item.innerHTML='<span class="toc-item-num">'+toFa(i+1)+'</span><span class="toc-item-title">'+title+'</span>';
+item.addEventListener('click',function(){showSlide(i,i>current?'next':'prev');closeToc()});
+list.appendChild(item);
+tocItems.push(item);
+});
+group.appendChild(head);
+group.appendChild(list);
+tocBody.appendChild(group);
+tocGroups.push(group);
+});
+
+function openToc(){tocSidebar.classList.add('open');tocOverlay.classList.add('open');tocToggle.classList.add('open')}
+function closeToc(){tocSidebar.classList.remove('open');tocOverlay.classList.remove('open');tocToggle.classList.remove('open')}
+tocToggle.addEventListener('click',function(){tocSidebar.classList.contains('open')?closeToc():openToc()});
+tocClose.addEventListener('click',closeToc);
+tocOverlay.addEventListener('click',closeToc);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeToc()});
+
+// Mini dots inside the floating capsule for slides within the current chapter
+function renderMiniDots(){
+const ch=chapters[current];
+const idxs=[];
+chapters.forEach(function(c,i){if(c===ch)idxs.push(i)});
+orbDots.innerHTML='';
+idxs.forEach(function(i){
+const d=document.createElement('span');
+if(i===current)d.classList.add('on');
+orbDots.appendChild(d);
+});
+}
+
+function updateNav(){
+orbChapter.textContent=chapters[current];
+renderMiniDots();
+tocItems.forEach(function(item,i){item.classList.toggle('active',i===current)});
+tocGroups.forEach(function(group,gi){
+const isActiveGroup=uniqueChapters[gi]===chapters[current];
+group.classList.toggle('active',isActiveGroup);
+if(isActiveGroup)group.classList.add('open');
+});
+tocProgressBar.style.width=((current+1)/total*100)+'%';
+const activeItem=tocItems[current];
+if(activeItem)activeItem.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+
+// Animate counters, bars and charts within a newly-activated slide
+function activateVisuals(slide){
+slide.querySelectorAll('.pro-bar[data-h]').forEach(function(bar,i){
+bar.style.height='0%';
+setTimeout(function(){bar.style.height=bar.getAttribute('data-h')+'%'},80+i*70);
+});
+slide.querySelectorAll('.count-up').forEach(function(el){
+if(el._counting)return;
+el._counting=true;
+const target=parseFloat(el.getAttribute('data-target'))||0;
+const dur=1300;const start=performance.now();
+function step(t){
+const p=Math.min((t-start)/dur,1);
+const eased=1-Math.pow(1-p,3);
+el.textContent=toFa(Math.floor(target*eased));
+if(p<1){requestAnimationFrame(step)}else{el.textContent=toFa(target);el._counting=false}
+}
+requestAnimationFrame(step);
+});
+}
+
+function showSlide(idx,dir){
+if(idx<0||idx>=total)return;
+slides[current].classList.remove('active');
+if(dir==='next')slides[current].classList.add('prev');
+current=idx;
+slides[current].classList.remove('prev');
+slides[current].classList.add('active');
+counter.textContent=toFa(current+1)+' / '+toFa(total);
+updateNav();
+history.replaceState(null,null,'#slide-'+(current+1));
+activateVisuals(slides[current]);
+}
+
+window.nextSlide=function(){showSlide(current+1,'next')};
+window.prevSlide=function(){showSlide(current-1,'prev')};
+
+// Keyboard
+document.addEventListener('keydown',function(e){
+if(e.key==='ArrowLeft'||e.key===' '){e.preventDefault();nextSlide()}
+else if(e.key==='ArrowRight'){e.preventDefault();prevSlide()}
+else if(e.key==='f'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+else if(e.key==='Escape'&&document.fullscreenElement){document.exitFullscreen()}
+});
+
+// Touch swipe
+let tx=0;
+document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',function(e){
+const diff=e.changedTouches[0].clientX-tx;
+if(Math.abs(diff)>50){diff>0?nextSlide():prevSlide()}
+},{passive:true});
+
+// Click zones
+document.querySelectorAll('.slide').forEach(function(s){
+s.addEventListener('click',function(e){
+const x=e.clientX;
+const w=window.innerWidth;
+if(x<w*0.15)nextSlide();
+else if(x>w*0.85)prevSlide();
+});
+});
+
+// Hash navigation
+function loadHash(){
+const m=location.hash.match(/slide-(\d+)/);
+if(m){const n=parseInt(m[1])-1;if(n>=0&&n<total)showSlide(n,'next')}
+}
+loadHash();
+window.addEventListener('hashchange',loadHash);
+
+// Init
+updateNav();
+activateVisuals(slides[current]);
+})();
+</script>
+</body>
+</html>

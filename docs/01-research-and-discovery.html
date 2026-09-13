@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>گزارش جامع کشف و تحقیقات - اکوسیستم شبکه تخفیف و باشگاه پذیرندگان POS</title>
+  <link rel="stylesheet" href="../assets/shared-styles.css">
+</head>
+<body>
+  <header class="doc-header">
+    <div class="container">
+      <h1>گزارش جامع کشف و تحقیقات (Research & Discovery)</h1>
+      <div class="subtitle">اکوسیستم شبکه تخفیف و باشگاه پذیرندگان دستگاه‌های کارتخوان (POS Merchant Club)</div>
+      <div class="meta">نسخه ۱.۰ | سند استراتژیک و فنی | شهریور ۱۴۰۵</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav class="toc">
+      <h3>فهرست عناوین گزارش (۳۲ بخش جامع)</h3>
+      <ol>
+        <li><a href="#sec-1">بیان مسئله و چالش‌های باشگاه‌های پذیرندگان سنتی</a></li>
+        <li><a href="#sec-2">تحلیل ذینفعان و ماتریس منافع</a></li>
+        <li><a href="#sec-3">اهداف استراتژیک کلان اکوسیستم</a></li>
+        <li><a href="#sec-4">اهداف کسب‌وکاری و مالی</a></li>
+        <li><a href="#sec-5">اهداف فنی و معماری نرم‌افزار</a></li>
+        <li><a href="#sec-6">ماتریس نقش‌ها و سطوح دسترسی (RBAC Matrix)</a></li>
+        <li><a href="#sec-7">استراتژی ایجاد اثر شبکه‌ای دوطرفه (Two-Sided Network Effects)</a></li>
+        <li><a href="#sec-8">معماری و استراتژی مینی‌اپ پیام‌رسان بله (Bale Mini-App Integration)</a></li>
+        <li><a href="#sec-9">تعریف جریان‌های اصلی تجربه کاربری (UX Master Flows)</a></li>
+        <li><a href="#sec-10">طراحی پروفایل و هویت دیجیتال پذیرنده</a></li>
+        <li><a href="#sec-11">ساختار کاتالوگ، دسته‌بندی و مدیریت محصولات/خدمات</a></li>
+        <li><a href="#sec-12">معماری موتور کمپین و انواع تخفیف‌ها</a></li>
+        <li><a href="#sec-13">قابلیت‌ها و سناریوهای هوش مصنوعی (AI Capabilities)</a></li>
+        <li><a href="#sec-14">احراز هویت و ورود پذیرندگان (Merchant Authentication)</a></li>
+        <li><a href="#sec-15">احراز هویت و شناسایی مشتریان (Customer Authentication)</a></li>
+        <li><a href="#sec-16">مکانیزم‌های فنی و امنیتی کد QR (Secure QR Code Engine)</a></li>
+        <li><a href="#sec-17">معماری نظارت، پایش و انتشار محتوا (Content Moderation)</a></li>
+        <li><a href="#sec-18">الزامات حقوقی، قوانین تجارت الکترونیک و حریم خصوصی</a></li>
+        <li><a href="#sec-19">معماری ثبت ردگیری و لاگ حسابرسی (Audit Logging & Compliance)</a></li>
+        <li><a href="#sec-20">داشبوردها و گزارش‌های مدیریتی و عملیاتی</a></li>
+        <li><a href="#sec-21">معماری ماژولار و تفکیک سرویس‌ها (Modular Architecture)</a></li>
+        <li><a href="#sec-22">استراتژی مقیاس‌پذیری و کارایی بالا (Scalability & Performance)</a></li>
+        <li><a href="#sec-23">معماری امنیت، رمزنگاری و حفاظت داده‌ها</a></li>
+        <li><a href="#sec-24">مدل داده‌ای جامع و روابط موجودیت‌ها (ERD Model)</a></li>
+        <li><a href="#sec-25">یکپارچه‌سازی با سرویس‌های بیرونی (PSP, Core Banking, Bale)</a></li>
+        <li><a href="#sec-26">محدوده محصول حداقل پذیرفتنی (MVP Scope Specification)</a></li>
+        <li><a href="#sec-27">نقشه راه توسعه و استقرار (۵-Phase Execution Roadmap)</a></li>
+        <li><a href="#sec-28">مدل‌های کسب‌وکار و جریان‌های درآمدی (Business & Revenue Models)</a></li>
+        <li><a href="#sec-29">شاخص‌های کلیدی عملکرد (KPIs) و سنجه‌های موفقیت</a></li>
+        <li><a href="#sec-30">ماتریس ریسک و راهکارهای کاهش و کنترل (Risk Matrix & Mitigation)</a></li>
+        <li><a href="#sec-31">تحلیل ماتریسی SWOT اکوسیستم</a></li>
+        <li><a href="#sec-32">چکیده مدیریتی و خودارزیابی انتقادی (Executive Summary & Self-Critique)</a></li>
+      </ol>
+    </nav>
+
+    <section id="sec-1" class="section">
+      <h2><span class="section-number">۱</span> بیان مسئله و چالش‌های باشگاه‌های پذیرندگان سنتی</h2>
+      <p>در حال حاضر شبکه پرداخت کشور و شرکت‌های ارائه دهنده خدمات پرداخت (PSP) با چالش‌های ساختاری در حفظ و فعال‌سازی پذیرندگان دستگاه‌های کارتخوان (POS) مواجه هستند. باشگاه‌های پذیرندگان موجود عمدتاً تک‌بعدی، مبتنی بر قرعه‌کشی و اعطای جوایز غیرفعال بوده و نتوانسته‌اند وفاداری پایدار یا خلق ارزش اقتصادی ملموس برای پذیرندگان ایجاد کنند.</p>
+      <div class="card-grid">
+        <div class="card card-accent">
+          <h4>۱. هزینه بالای نگهداری پایانه POS</h4>
+          <p>هزینه‌های سخت‌افزاری، پشتیبانی و تراکنش برای شبکه بانکی بالا است، اما سودآوری پایانه‌های کم‌تراکنش یا رسوب حساب پایین می‌باشد.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>۲. فقدان ابزار تسخیر مشتری</h4>
+          <p>پذیرندگان خرد هیچ ابزار دیجیتالی برای جذب، بازگشت و ایجاد وفاداری مشتریان محلی در اختیار ندارند.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>۳. عدم ارتباط مستقیم با شبکه مشتریان</h4>
+          <p>بانک و PSP ارتباط مستقیمی میان خریداران و فروشندگان در نقطه خرید (POS) جهت گردش سرمایه ایجاد نکرده‌اند.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-2" class="section">
+      <h2><span class="section-number">۲</span> تحلیل ذینفعان و ماتریس منافع</h2>
+      <table>
+        <thead>
+          <tr><th>ذینفع</th><th>نقش اصلی</th><th>انتظارات و منافع</th><th>ارزش پیشنهادی اکوسیستم</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>بانک / PSP</strong></td><td>زیرساخت پرداخت POS</td><td>افزایش رسوب حساب و تراکنش</td><td>ایجاد وابستگی متقابل و ابزار جذب مشتری</td></tr>
+          <tr><td><strong>پذیرندگان</strong></td><td>عرضه‌کنندگان تخفیف</td><td>افزایش فروش و مشتری جدید</td><td>باشگاه مشتریان و کاتالوگ دیجیتال در بله</td></tr>
+          <tr><td><strong>مشتریان خریدار</strong></td><td>مصرف‌کنندگان تخفیف</td><td>تخفیف واقعی و سهولت خرید</td><td>مینی‌اپ بله بدون نصب اپ جدید، اسکن سریع QR</td></tr>
+          <tr><td><strong>پیام‌رسان بله</strong></td><td>میزبان زیرساخت و مینی‌اپ</td><td>نگهداشت کاربر و درآمد ترافیک</td><td>تکمیل کانال خدمات مالی و خریدهای حضوری</td></tr>
+          <tr><td><strong>تیم راهبری</strong></td><td>مدیریت و نظارت کلان</td><td>رشد اکوسیستم و پایداری امنیت</td><td>کنترل کامل نظارت، ابزارهای AI moderation</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="sec-3" class="section">
+      <h2><span class="section-number">۳</span> اهداف استراتژیک کلان اکوسیستم</h2>
+      <ul>
+        <li><strong>پلاتفرم دوسویه تخفیف حضوری:</strong> پیوند ظرفیت شبکه POS بانکی با پایه کاربران پیام‌رسان بله.</li>
+        <li><strong>کاهش ریزش پذیرندگان:</strong> ایجاد ارزش افزوده تجاری فراتر از تسویه مالی.</li>
+        <li><strong>بومی‌سازی تجربه خرید تخفیف‌دار:</strong> تخفیف لحظه‌ای، جغرافیامحور و با اصالت‌سنجی نرم‌افزاری/سخت‌افزاری.</li>
+      </ul>
+    </section>
+
+    <section id="sec-4" class="section">
+      <h2><span class="section-number">۴</span> اهداف کسب‌وکاری و مالی</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h4>رشد تراکنش POS</h4>
+          <p>افزایش ۲۵ درصدی تعداد تراکنش‌های شاخص روی پایانه‌های فعال.</p>
+        </div>
+        <div class="card">
+          <h4>جذب پذیرندگان جدید</h4>
+          <p>ترغیب کسب‌وکارهای محلی به دریافت دستگاه کارتخوان بانکی.</p>
+        </div>
+        <div class="card">
+          <h4>مدل‌های درآمدی متنوع</h4>
+          <p>کارمزد اعتبارسنجی کپن، اشتراک ویژه پذیرندگان، پروموشن اختصاصی.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-5" class="section">
+      <h2><span class="section-number">۵</span> اهداف فنی و معماری نرم‌افزار</h2>
+      <div class="callout callout-info">
+        <div class="callout-title">اصول کلیدی معماری سیستم</div>
+        سرویس‌های مستقل (Decoupled Services)، رمزنگاری QR با HMAC-SHA256 و AES-256-GCM، و معماری کانال‌محور مستقل از بله.
+      </div>
+    </section>
+
+    <section id="sec-6" class="section">
+      <h2><span class="section-number">۶</span> ماتریس نقش‌ها و سطوح دسترسی (RBAC Matrix)</h2>
+      <table>
+        <thead>
+          <tr><th>کد نقش</th><th>عنوان نقش</th><th>سطح دسترسی اصلی</th><th>محدوده عملیات</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ROLE_SUPER_ADMIN</td><td>مدیر ارشد سیستم</td><td>Full Control</td><td>پیکربندی کل سیستم و مدیریت ارشد</td></tr>
+          <tr><td>ROLE_CONTENT_ADMIN</td><td>مدیر نظارت محتوا</td><td>تایید/رد کمپین/کاتالوگ</td><td>بررسی محتوا، انتشار و قوانین moderation</td></tr>
+          <tr><td>ROLE_FINANCE_ADMIN</td><td>مدیر مالی و گزارش‌گیری</td><td>مشاهده گزارش و تسویه</td><td>تراکنش‌ها، کمیسیون‌ها و حسابرسی</td></tr>
+          <tr><td>ROLE_PSP_ADMIN</td><td>نماینده PSP</td><td>مدیریت POS</td><td>تخصیص POS و پذیرندگان مربوطه</td></tr>
+          <tr><td>ROLE_MERCHANT_OWNER</td><td>مالک پذیرندگی</td><td>مدیریت کامل کسب‌وکار</td><td>ایجاد شعبه، کاتالوگ، کمپین و پرسنل</td></tr>
+          <tr><td>ROLE_MERCHANT_MANAGER</td><td>مدیر فروشگاه/شعبه</td><td>ایجاد کمپین/کاتالوگ</td><td>تنظیم تخفیف، محصول و گزارش شعبه</td></tr>
+          <tr><td>ROLE_MERCHANT_CASHIER</td><td>صندوق‌دار/متصدی POS</td><td>ثبت و اعتبارسنجی QR</td><td>اسکن کد مشتری و تایید کوپن</td></tr>
+          <tr><td>ROLE_CUSTOMER_USER</td><td>مشتری (کاربر بله)</td><td>دریافت و استفاده تخفیف</td><td>جستجو، دریافت کد QR و ثبت نظر</td></tr>
+          <tr><td>ROLE_AUDIT_LOG_VIEWER</td><td>ممیز امنیت و ناظر</td><td>مشاهده لاگ‌های امنیتی</td><td>بررسی Audit logs و تخلفات</td></tr>
+          <tr><td>ROLE_AI_MODERATOR_BOT</td><td>ربات هوشمند نظارت</td><td>بررسی خودکار محتوا</td><td>تحلیل متن/تصویر و نشانه‌گذاری موارد مشکوک</td></tr>
+          <tr><td>ROLE_SUPPORT_AGENT</td><td>کارشناس پشتیبانی</td><td>پاسخگویی تیکت‌ها</td><td>مشاهده وضعیت کوپن و رفع چالش‌ها</td></tr>
+          <tr><td>ROLE_API_INTEGRATOR</td><td>کلید API بیرونی</td><td>دسترسی محدود REST API</td><td>استعلام پایانه‌ها و همگام‌سازی داده‌ها</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="sec-7" class="section">
+      <h2><span class="section-number">۷</span> استراتژی ایجاد اثر شبکه‌ای دوطرفه</h2>
+      <div class="flow">
+        <div class="flow-node badge-blue">افزایش پذیرندگان POS</div>
+        <span class="flow-arrow">&larr;</span>
+        <div class="flow-node badge-purple">تنوع کاتالوگ و تخفیف‌ها</div>
+        <span class="flow-arrow">&larr;</span>
+        <div class="flow-node badge-green">جذب کاربران بیشتر در بله</div>
+        <span class="flow-arrow">&larr;</span>
+        <div class="flow-node badge-amber">افزایش فروش و تراکنش POS</div>
+      </div>
+    </section>
+
+    <section id="sec-8" class="section">
+      <h2><span class="section-number">۸</span> معماری و استراتژی مینی‌اپ پیام‌رسان بله</h2>
+      <ul>
+        <li><strong>پایه کاربر فعال بانکی:</strong> بستر پیام‌رسان بانکی کشور برای خدمات پرداخت.</li>
+        <li><strong>کاهش اصطکاک نصب (Zero Install):</strong> دسترسی از طریق مینی‌اپ وب بدون نیاز به دانلود.</li>
+        <li><strong>لایه Adapter مستقل:</strong> جداسازی هسته سیستم از بستر پیام‌رسان.</li>
+      </ul>
+    </section>
+
+    <section id="sec-9" class="section">
+      <h2><span class="section-number">۹</span> تعریف جریان‌های اصلی تجربه کاربری</h2>
+      <p>۱) ورود و ثبت پذیرنده، ۲) ایجاد کاتالوگ و کمپین، ۳) کشف و صدور کوپن مشتری، ۴) اسکن و اعتبارسنجی حضوری.</p>
+    </section>
+
+    <section id="sec-10" class="section">
+      <h2><span class="section-number">۱۰</span> طراحی پروفایل و هویت دیجیتال پذیرنده</h2>
+      <p>ویترین دیجیتال شامل نام تجاری، لوگو، بنر، آدرس جغرافیایی روی نقشه، شماره تماس، پایانه‌های متصل، ساعات کاری و کاتالوگ.</p>
+    </section>
+
+    <section id="sec-11" class="section">
+      <h2><span class="section-number">۱۱</span> ساختار کاتالوگ، دسته‌بندی و مدیریت محصولات/خدمات</h2>
+      <p>دسته‌بندی درختی دو سطحی همراه با قیمت اصلی، قیمت با تخفیف، عکس، موجودی و توضیحات محصول.</p>
+    </section>
+
+    <section id="sec-12" class="section">
+      <h2><span class="section-number">۱۲</span> معماری موتور کمپین و انواع تخفیف‌ها</h2>
+      <div class="card-grid">
+        <div class="card"><h4>تخفیف درصدی ثابت</h4><p>مثال: ۲۰٪ تخفیف روی کل کالاها.</p></div>
+        <div class="card"><h4>تخفیف مبلغی (مقطوع)</h4><p>مثال: ۵۰,۰۰۰ تومان برای خریدهای بالای ۲۰۰,۰۰۰ تومان.</p></div>
+        <div class="card"><h4>تخفیف پله‌ای / ترکیبی</h4><p>مثال: خرید ۲ کالا ۱۰٪، خرید ۳ کالا ۲۵٪ تخفیف.</p></div>
+      </div>
+    </section>
+
+    <section id="sec-13" class="section">
+      <h2><span class="section-number">۱۳</span> قابلیت‌ها و سناریوهای هوش مصنوعی</h2>
+      <ul>
+        <li><strong>پیش‌بررسی خودکار (AI Moderation):</strong> بررسی متون و تصاویر جهت جلوگیری از محتوای نامناسب.</li>
+        <li><strong>دستیار تولید محتوا (AI Assistant):</strong> نگارش متون جذاب تبلیغاتی برای کالاها.</li>
+      </ul>
+    </section>
+
+    <section id="sec-14" class="section">
+      <h2><span class="section-number">۱۴</span> احراز هویت و ورود پذیرندگان</h2>
+      <p>بر اساس شناسه ملی / کد ملی، شماره پذیرنده Terminal ID / Merchant ID و رمز یکبار مصرف OTP پیامکی.</p>
+    </section>
+
+    <section id="sec-15" class="section">
+      <h2><span class="section-number">۱۵</span> احراز هویت و شناسایی مشتریان</h2>
+      <p>از طریق OAuth2 و شناسه امن مینی‌اپ بله (Bale User ID & InitData Signature Verification).</p>
+    </section>
+
+    <section id="sec-16" class="section">
+      <h2><span class="section-number">۱۶</span> مکانیزم‌های فنی و امنیتی کد QR</h2>
+      <div class="callout callout-warning">
+        <div class="callout-title">رمزنگاری کد QR پویا</div>
+        <code>Payload = Encrypt_AES256(CouponID + UserID + Nonce + ExpireTimestamp + HMAC_SHA256)</code>
+        <br>طول عمر محدود (۶۰ ثانیه‌ای) و بی‌اعتبار شدن پس از یکبار اسکن.
+      </div>
+    </section>
+
+    <section id="sec-17" class="section">
+      <h2><span class="section-number">۱۷</span> معماری نظارت، پایش و انتشار محتوا</h2>
+      <p>چرخه حیات محتوا: <code>Draft &rarr; Submitted &rarr; AI Moderation &rarr; Review &rarr; Published / Rejected</code>.</p>
+    </section>
+
+    <section id="sec-18" class="section">
+      <h2><span class="section-number">۱۸</span> الزامات حقوقی، قوانین تجارت الکترونیک و حریم خصوصی</h2>
+      <p>صیانت از داده‌های شخصی، رعایت قوانین نظام صنفی در تخفیف‌ها، و شفافیت شروط استفاده از کوپن.</p>
+    </section>
+
+    <section id="sec-19" class="section">
+      <h2><span class="section-number">۱۹</span> معماری ثبت ردگیری و لاگ حسابرسی</h2>
+      <p>ثبت غیرقابل تغییر (Append-Only Log) همراه با کاربر، IP، زمان و تغییرات قبل/بعد داده‌های حساس.</p>
+    </section>
+
+    <section id="sec-20" class="section">
+      <h2><span class="section-number">۲۰</span> داشبوردها و گزارش‌های مدیریتی و عملیاتی</h2>
+      <p>نمودارهای آمار فروش، نرخ تبدیل کمپین، پراکندگی جغرافیایی تخفیف‌ها و عملکرد پایانه‌های POS به تفکیک PSP.</p>
+    </section>
+
+    <section id="sec-21" class="section">
+      <h2><span class="section-number">۲۱</span> معماری ماژولار و تفکیک سرویس‌ها</h2>
+      <p>۱۳ سرویس ماژولار مستقل با ارتباط از طریق REST API و gRPC.</p>
+    </section>
+
+    <section id="sec-22" class="section">
+      <h2><span class="section-number">۲۲</span> استراتژی مقیاس‌پذیری و کارایی بالا</h2>
+      <p>کشینگ Redis برای کاتالوگ و QR کد، صف پیام RabbitMQ/Kafka، و PostgreSQL همراه با Read-Replicas.</p>
+    </section>
+
+    <section id="sec-23" class="section">
+      <h2><span class="section-number">۲۳</span> معماری امنیت، رمزنگاری و حفاظت داده‌ها</h2>
+      <p>پروتوکل HTTPS/TLS 1.3، رمزنگاری داده‌های ساکن (Data at Rest) و کنترل دسترسی API Gateway.</p>
+    </section>
+
+    <section id="sec-24" class="section">
+      <h2><span class="section-number">۲۴</span> مدل داده‌ای جامع و روابط موجودیت‌ها</h2>
+      <p>موجودیت‌ها: Users, Merchants, Terminals, Categories, Products, Campaigns, Coupons, QRTokens, Redemptions, AuditLogs.</p>
+    </section>
+
+    <section id="sec-25" class="section">
+      <h2><span class="section-number">۲۵</span> یکپارچه‌سازی با سرویس‌های بیرونی</h2>
+      <p>اتصال به شاهکار، سامانه پیامکی OTP، سرویس‌های PSP و بله SDK.</p>
+    </section>
+
+    <section id="sec-26" class="section">
+      <h2><span class="section-number">۲۶</span> محدوده محصول حداقل پذیرفتنی (MVP Scope)</h2>
+      <p>منطقه پایلوت، احراز هویت OTP، کاتالوگ ساده، کمپین درصدی، مینی‌اپ بله و اسکن وب-پایه QR.</p>
+    </section>
+
+    <section id="sec-27" class="section">
+      <h2><span class="section-number">۲۷</span> نقشه راه توسعه و استقرار (۵ فاز)</h2>
+      <table>
+        <thead>
+          <tr><th>فاز</th><th>عنوان فاز</th><th>زمان‌بندی</th><th>خروجی اصلی</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>فاز ۱</td><td>طراحی و معماری core</td><td>ماه ۱ - ۲</td><td>مستندات معماری و زیرساخت MVP Backend</td></tr>
+          <tr><td>فاز ۲</td><td>توسعه MVP و مینی‌اپ بله</td><td>ماه ۳ - ۴</td><td>نسخه پایلوت، ثبت پذیرنده و صدور QR</td></tr>
+          <tr><td>فاز ۳</td><td>پایلوت منطقه‌ای</td><td>ماه ۵</td><td>تست عملیاتی با ۱۰۰ پذیرنده منتخب</td></tr>
+          <tr><td>فاز ۴</td><td>توسعه پیشرفته و AI</td><td>ماه ۶ - ۷</td><td>هوش مصنوعی، کمپین هوشمند و داشبورد تحلیلی</td></tr>
+          <tr><td>فاز ۵</td><td>توسعه کشوری و اتصال مستقیم PSP</td><td>ماه ۸ به بعد</td><td>توسعه سراسری و اتصال مستقیم به نرم‌افزار کارتخوان‌ها</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="sec-28" class="section">
+      <h2><span class="section-number">۲۸</span> مدل‌های کسب‌وکار و جریان‌های درآمدی</h2>
+      <p>کمیسیون فروش‌های تخفیف‌دار، اشتراک ماهانه پرمیوم پذیرندگان، و جایگاه‌های تبلیغاتی ویژه در بله.</p>
+    </section>
+
+    <section id="sec-29" class="section">
+      <h2><span class="section-number">۲۹</span> شاخص‌های کلیدی عملکرد (KPIs)</h2>
+      <p>پذیرندگان فعال (MAU)، نرخ استفاده کوپن (Redemption Rate)، متوسط ارزش سبد خرید (AOV) و نرخ نگهداشت (Retention).</p>
+    </section>
+
+    <section id="sec-30" class="section">
+      <h2><span class="section-number">۳۰</span> ماتریس ریسک و راهکارهای کاهش و کنترل</h2>
+      <p>کنترل تقلب با QR کد پویا و محدودیت زمانی، آنبوردینگ آسان برای جلوگیری از مقاومت پذیرندگان.</p>
+    </section>
+
+    <section id="sec-31" class="section">
+      <h2><span class="section-number">۳۱</span> تحلیل ماتریسی SWOT اکوسیستم</h2>
+      <div class="swot-grid">
+        <div class="swot-cell swot-s">
+          <h4>نقاط قوت (S)</h4>
+          <ul><li>اتصال به POS بانکی</li><li>پایه کاربر آماده در بله</li><li>امپلیت امنیت QR پویا</li></ul>
+        </div>
+        <div class="swot-cell swot-w">
+          <h4>نقاط ضعف (W)</h4>
+          <ul><li>وابستگی به همسویی PSPها</li><li>چالش آموزش پذیرندگان خرد</li></ul>
+        </div>
+        <div class="swot-cell swot-o">
+          <h4>فرصت‌ها (O)</h4>
+          <ul><li>کاهش هزینه تبلیغات پذیرنده</li><li>وفاداری به کارتخوان‌های بانک</li></ul>
+        </div>
+        <div class="swot-cell swot-t">
+          <h4>تهدیدها (T)</h4>
+          <ul><li>تغییر رگولاتوری بانک مرکزی</li><li>مقاومت صندوق‌داران در فروشگاه</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-32" class="section">
+      <h2><span class="section-number">۳۲</span> چکیده مدیریتی و خودارزیابی انتقادی</h2>
+      <div class="callout callout-critical">
+        <div class="callout-title">ارزیابی انتقادی</div>
+        سرعت و سادگی اسکن کد QR در هنگام خرید حضوری، ضامن اصلی موفقیت این محصول است. تاخیر بیش از ۳ ثانیه در اعتبارسنجی موجب شکست عملیاتی محصول در نقطه فروش خواهد شد.
+      </div>
+    </section>
+  </div>
+</body>
+</html>

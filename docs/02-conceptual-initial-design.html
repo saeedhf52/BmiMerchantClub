@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>طراحی مفهومی و اولیه - اکوسیستم شبکه تخفیف و باشگاه پذیرندگان POS</title>
+  <link rel="stylesheet" href="../assets/shared-styles.css">
+</head>
+<body>
+  <header class="doc-header">
+    <div class="container">
+      <h1>طراحی مفهومی، محصولی و فنی اولیه (Conceptual Design)</h1>
+      <div class="subtitle">اکوسیستم شبکه تخفیف و باشگاه پذیرندگان دستگاه‌های کارتخوان (POS Merchant Club)</div>
+      <div class="meta">نسخه ۱.۰ | معماری محصول، ماژول‌ها و سناریوهای عملیاتی | شهریور ۱۴۰۵</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <nav class="toc">
+      <h3>فهرست بخش‌های طراحی مفهومی</h3>
+      <ol>
+        <li><a href="#sec-vision">چشم‌انداز محصول و محدوده (Vision & Scope)</a></li>
+        <li><a href="#sec-personas">پرسوناهای اصلی سیستم (User Personas)</a></li>
+        <li><a href="#sec-modules">معماری ۱۳ ماژول اصلی سیستم (Core Modules)</a></li>
+        <li><a href="#sec-architecture">دیاگرام معماری فنی (Architecture Diagram)</a></li>
+        <li><a href="#sec-erd">مدل داده‌ای جامع (Entities & Attributes ERD)</a></li>
+        <li><a href="#sec-governance">چارچوب امنیت و حاکمیت محتوا (Security & Governance)</a></li>
+        <li><a href="#sec-workflows">دیاگرام جریان‌های کاری (Workflows)</a></li>
+        <li><a href="#sec-moscow">اولویه‌بندی ویژگی‌های MVP (MoSCoW Matrix)</a></li>
+        <li><a href="#sec-scenarios">۹ سناریوی عملیاتی گام‌به‌گام (Operational Scenarios)</a></li>
+      </ol>
+    </nav>
+
+    <!-- VISION & SCOPE -->
+    <section id="sec-vision" class="section">
+      <h2>چشم‌انداز محصول و محدوده</h2>
+      <p>ایجاد زیرساخت یکپارچه خریدهای تخفیف‌دار حضوری با پیوند زدن شبکه دستگاه‌های کارتخوان بانکی (POS) به پیام‌رسان بله، به طوری که پذیرندگان به سادگی کاتالوگ و تخفیف‌های خود را ارائه کرده و مشتریان بدون نصب اپ اضافی، کوپن‌های پویای امن را دریافت و استفاده نمایند.</p>
+    </section>
+
+    <!-- PERSONAS -->
+    <section id="sec-personas" class="section">
+      <h2>پرسوناهای اصلی سیستم (۵ پرسونای کاربردی)</h2>
+      <div class="card-grid">
+        <div class="card card-accent">
+          <h4>۱. مدیر شبکه PSP / بانک (رضا - ۴۵ ساله)</h4>
+          <p>هدف: افزایش تراکنش‌های دستگاه کارتخوان و کاهش خروج پذیرندگان.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>۲. پذیرنده خرد محلی (علی - کسب‌وکار سوپرمارکت)</h4>
+          <p>هدف: جذب مشتریان جدید محلی با ابزار تخفیف‌دهی بدون هزینه سنگین.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>۳. پذیرنده زنجیره‌ای (سارا - مدیر بازاریابی پوشاک)</h4>
+          <p>هدف: تعریف کمپین‌های حرفه‌ای پله‌ای و تحلیل گزارش‌های دقیق فروش.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>۴. مشتری شهری بله (مریم - ۲۸ ساله)</h4>
+          <p>هدف: یافتن تخفیف‌های واقعی نزدیک محل سکونت و خرید آسان با اسکن QR.</p>
+        </div>
+        <div class="card card-accent">
+          <h4>۵. مدیر نظارت و ناظر سیستم (امیر - مدیر محتوا)</h4>
+          <p>هدف: حصول اطمینان از سلامت کاتالوگ‌ها، عدم وجود تخلف و تایید کمپین‌ها.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section id="sec-modules" class="section">
+      <h2>معماری ۱۳ ماژول اصلی سیستم</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>شماره</th>
+            <th>نام ماژول</th>
+            <th>وظیفه کلیدی</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>۱</td><td><strong>Identity & Access Module</strong></td><td>احراز هویت OTP، JWT، OAuth2 بله و مدیریت نقش‌های RBAC</td></tr>
+          <tr><td>۲</td><td><strong>Merchant Management Module</strong></td><td>ثبت و احراز هویت پذیرندگان، اتصال کارتخوان‌ها و شعبه‌ها</td></tr>
+          <tr><td>۳</td><td><strong>Business Profile Module</strong></td><td>مدیریت ویترین دیجیتال، آدرس جغرافیایی، ساعات کاری و لوگو</td></tr>
+          <tr><td>۴</td><td><strong>Catalog & Inventory Module</strong></td><td>مدیریت درختی دسته‌بندی‌ها، کالاها، قیمت‌ها و عکس کاتالوگ</td></tr>
+          <tr><td>۵</td><td><strong>Campaign Engine Module</strong></td><td>تعریف قوانین تخفیف درصدی، مقطوع، پله‌ای و زمان‌بندی انتشار</td></tr>
+          <tr><td>۶</td><td><strong>QR Token Engine Module</strong></td><td>تولید توکن‌های رمزنگاری‌شده، یک‌بارمصرف و پویای QR کد</td></tr>
+          <tr><td>۷</td><td><strong>Redemption Engine Module</strong></td><td>اسکن، اعتبارسنجی و ثبت نهایی مصرف کوپن تخفیف در فروشگاه</td></tr>
+          <tr><td>۸</td><td><strong>Content Moderation Module</strong></td><td>پایش هوش مصنوعی و تایید دستی محتوای کاتالوگ و کمپین‌ها</td></tr>
+          <tr><td>۹</td><td><strong>AI Assistant Module</strong></td><td>دستیار تولید متون تبلیغاتی و بررسی خودکار عکس و متون کالا</td></tr>
+          <tr><td>۱۰</td><td><strong>Analytics & Reporting Module</strong></td><td>تولید گزارش‌های تحلیلی، نرخ تبدیل، تراکنش و داشبوردها</td></tr>
+          <tr><td>۱۱</td><td><strong>Audit Log & Security Module</strong></td><td>ثبت غیرقابل تغییر تمامی رویدادها، تغییرات و دسترسی‌های سیستم</td></tr>
+          <tr><td>۱۲</td><td><strong>Notification & Messaging Module</strong></td><td>ارسال پیامک OTP، اعلان‌های مینی‌اپ بله و وضعیت درخواست‌ها</td></tr>
+          <tr><td>۱۳</td><td><strong>External Integration Adapter</strong></td><td>اتصال به شاهکار، پیام‌رسان بله، سرویس‌های PSP و Core Banking</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ARCHITECTURE DIAGRAM -->
+    <section id="sec-architecture" class="section">
+      <h2>دیاگرام معماری فنی سیستم</h2>
+      <div class="diagram-container">
+        <div class="diagram-title">نمای لایه‌ای معماری اکوسیستم (System Architecture)</div>
+        <div style="text-align: center; line-height: 2;">
+          <div style="background: var(--navy); color: white; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;">
+            <strong>لایه ارائه (Client Layer):</strong> Bale Mini-App (JS SDK) | Merchant Web Portal | Admin Dashboard
+          </div>
+          <div style="font-size: 1.2rem; color: var(--blue);">&#x25BC; API Gateway (TLS 1.3 / Rate Limiting / Authentication) &#x25BC;</div>
+          <div style="background: var(--navy-light); color: white; padding: 0.8rem; border-radius: 8px; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            <strong>لایه سرویس‌ها (Core Microservices):</strong> Identity | Merchant | Catalog | Campaign | QR Engine | Redemption | AI | Audit
+          </div>
+          <div style="font-size: 1.2rem; color: var(--blue);">&#x25BC; Data & Infrastructure Layer &#x25BC;</div>
+          <div style="background: var(--gray-800); color: white; padding: 0.8rem; border-radius: 8px; margin-top: 0.5rem;">
+            PostgreSQL (Main DB) | Redis Cache (QR & Tokens) | RabbitMQ (Message Bus) | Object Storage (Images)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ERD -->
+    <section id="sec-erd" class="section">
+      <h2>مدل داده‌ای جامع (Entities & Attributes ERD)</h2>
+      <p>موجودیت‌ها و کلیدهای اصلی پایگاه داده به شرح زیر است:</p>
+      <ul>
+        <li><code>Users</code> (id, phone_number, role, is_active, created_at)</li>
+        <li><code>Merchants</code> (id, user_id, business_name, psp_merchant_id, national_code, status)</li>
+        <li><code>Terminals</code> (id, merchant_id, terminal_id_pos, psp_name, status)</li>
+        <li><code>Products</code> (id, merchant_id, category_id, name, original_price, image_url, status)</li>
+        <li><code>Campaigns</code> (id, merchant_id, title, discount_type, discount_value, start_date, end_date, status)</li>
+        <li><code>Coupons</code> (id, campaign_id, user_id, coupon_code, status, expire_at)</li>
+        <li><code>Redemptions</code> (id, coupon_id, terminal_id, cashier_id, final_amount, redeemed_at)</li>
+      </ul>
+    </section>
+
+    <!-- WORKFLOWS -->
+    <section id="sec-workflows" class="section">
+      <h2>دیاگرام جریان‌های کاری اصلی</h2>
+      <div class="callout callout-info">
+        <div class="callout-title">چرخه انتشار کمپین:</div>
+        ثبت توسط پذیرنده &larr; پایش هوشمند AI &larr; بررسی و تایید مدیر &larr; انتشار در مینی‌اپ بله &larr; دریافت کوپن توسط مشتری
+      </div>
+    </section>
+
+    <!-- MoSCoW -->
+    <section id="sec-moscow" class="section">
+      <h2>اولویه‌بندی ویژگی‌های MVP (ماتریس MoSCoW)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>دسته</th>
+            <th>ویژگی‌ها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="priority-must">Must Have (ضروری)</td><td>احراز هویت OTP، پروفایل پذیرنده، کاتالوگ کالا، کمپین درصدی، مینی‌اپ بله، صدور و اسکن QR کد</td></tr>
+          <tr><td class="priority-should">Should Have (مهم)</td><td>داشبورد تحلیلی پیشرفته، بررسی هوشمند AI، تخفیف پله‌ای، جستجوی روی نقشه</td></tr>
+          <tr><td class="priority-could">Could Have (مستحب)</td><td>دستیار هوش مصنوعی متن‌نویسی کاتالوگ، اشتراک‌پذیری اجتماعی، گیمیفیکیشن پاداش</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SCENARIOS -->
+    <section id="sec-scenarios" class="section">
+      <h2>۹ سناریوی عملیاتی گام‌به‌گام (Operational Scenarios)</h2>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۱: احراز هویت و ثبت‌نام پذیرنده جدید</h4>
+        <p>۱. ورود شماره موبایل و کد ملی &larr; ۲. استعلام شاهکار &larr; ۳. استعلام Terminal ID از PSP &larr; ۴. صدور حساب پذیرنده.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۲: پیکربندی پروفایل کسب‌وکار</h4>
+        <p>۱. ورود به پنل مدیریت &larr; ۲. ثبت لوگو، نام تجاری، موقعیت مکانی و ساعات کاری &larr; ۳. ذخیره و انتشار اولیه.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۳: تعریف کمپین تخفیف جدید</h4>
+        <p>۱. انتخاب نوع تخفیف (مثلاً ۲۰٪) &larr; ۲. تعیین سقف تخفیف و زمان اعتبار &larr; ۳. انتخاب کالاهای مرتبط &larr; ۴. ارسال برای تایید.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۴: بررسی و تایید کمپین توسط مدیر</h4>
+        <p>۱. پایش اتوماتیک متون و عکس با AI &larr; ۲. تایید ناظر در داشبورد مدیریت &larr; ۳. تغییر وضعیت کمپین به Published.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۵: کشف تخفیف و دریافت کوپن توسط مشتری در بله</h4>
+        <p>۱. باز کردن مینی‌اپ بله &larr; ۲. مشاهده پذیرندگان نزدیک &larr; ۳. انتخاب کمپین و کلیک روی «دریافت کوپن تخفیف».</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۶: تولید و نمایش QR کد پویا و امن</h4>
+        <p>۱. درخواست مشتری &larr; ۲. تولید توکن AES-256 حاوی Nonce و Timestamp &larr; ۳. رندر QR کد با اعتبار ۶۰ ثانیه روی گوشی مشتری.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۷: اسکن QR کد توسط پذیرنده/صندوق‌دار</h4>
+        <p>۱. حضور مشتری در فروشگاه &larr; ۲. باز کردن وب-اپ اسکنر یا دستگاه کارتخوان توسط صندوق‌دار &larr; ۳. اسکن QR کد مشتری.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۸: اعتبارسنجی و ثبت موفق/ناموفق تخفیف</h4>
+        <p>۱. رمزگشایی و بررسی امضای HMAC و انقضا &larr; ۲. محاسبه مبلغ تخفیف &larr; ۳. ثبت Redemption &larr; ۴. نمایش پیام تایید روی هر دو گوشی.</p>
+      </div>
+
+      <div class="card card-accent" style="margin-bottom: 1rem;">
+        <h4>سناریوی ۹: بروزرسانی لحظه‌ای داشبورد و آمار</h4>
+        <p>۱. ثبت رویداد در پایگاه داده &larr; ۲. ارسال پیام WebSocket &larr; ۳. بروزرسانی آمار فروش پذیرنده و آمار کل مدیریتی.</p>
+      </div>
+
+    </section>
+
+  </div>
+</body>
+</html>
