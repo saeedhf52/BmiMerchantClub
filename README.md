@@ -45,9 +45,6 @@
 │   └── 03-management-presentation-catalog-raster.pdf
 ├── assets/
 │   └── shared-styles.css
-├── enrich_html.py
-├── enrich_more_slides.py
-├── enrich_presentation.py
 └── fix_dates.py
 ```
 
